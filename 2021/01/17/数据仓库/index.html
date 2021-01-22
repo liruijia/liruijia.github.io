@@ -31,7 +31,7 @@
 <meta property="og:description" content="数据仓库在同步表的时候，针对于不同的情况分为增量表和全量表，下面将对于全量和增量的概念进行一一阐述！">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-01-17T10:36:49.000Z">
-<meta property="article:modified_time" content="2021-01-17T14:04:46.207Z">
+<meta property="article:modified_time" content="2021-01-22T14:54:48.017Z">
 <meta property="article:author" content="Liruijia">
 <meta property="article:tag" content="全量">
 <meta property="article:tag" content="增量">
@@ -134,7 +134,6 @@
         <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
         <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
         <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
-        <li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
@@ -191,7 +190,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%A8%E9%87%8F%E4%B8%8E%E5%A2%9E%E9%87%8F"><span class="nav-number">1.</span> <span class="nav-text">全量与增量</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%85%A8%E9%87%8F"><span class="nav-number">2.</span> <span class="nav-text">1.全量</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%A2%9E%E9%87%8F%E8%A1%A8"><span class="nav-number">3.</span> <span class="nav-text">2.增量表</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E5%BF%AB%E7%85%A7%E8%A1%A8"><span class="nav-number">4.</span> <span class="nav-text">3.快照表</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E6%8B%89%E9%93%BE%E8%A1%A8"><span class="nav-number">5.</span> <span class="nav-text">4.拉链表</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%A8%E9%87%8F%E4%B8%8E%E5%A2%9E%E9%87%8F"><span class="nav-number">1.</span> <span class="nav-text">全量与增量</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%A8%E9%87%8F"><span class="nav-number">2.</span> <span class="nav-text">全量</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A2%9E%E9%87%8F%E8%A1%A8"><span class="nav-number">3.</span> <span class="nav-text">增量表</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E5%BF%AB%E7%85%A7%E8%A1%A8"><span class="nav-number">4.</span> <span class="nav-text">3.快照表</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E6%8B%89%E9%93%BE%E8%A1%A8"><span class="nav-number">5.</span> <span class="nav-text">4.拉链表</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -207,7 +206,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-count">6</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -292,10 +291,16 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2021-01-17 18:36:49 / 修改时间：22:04:46" itemprop="dateCreated datePublished" datetime="2021-01-17T18:36:49+08:00">2021-01-17</time>
+      <time title="创建时间：2021-01-17 18:36:49" itemprop="dateCreated datePublished" datetime="2021-01-17T18:36:49+08:00">2021-01-17</time>
     </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2021-01-22 22:54:48" itemprop="dateModified" datetime="2021-01-22T22:54:48+08:00">2021-01-22</time>
+      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -348,12 +353,12 @@
 <p>（3）增量：则是指在某一段时间内系统中保有数量的变化</p>
 <p>（4）增量=流入量–流出量</p>
 <p>（5）本期期末存量=上期期末存量+本期内增量</p>
-<h1 id="1-全量"><a href="#1-全量" class="headerlink" title="1.全量"></a>1.全量</h1><p>常说的全量表：即当前时刻存放了所有的历史记录数据。 每一次在同步数据的时候，都要将全部的数据进行拉取，这样做的好处就是，每一次进行查询的时候，表里存放了所有的历史数据，不需要再和之前的数据进行关联，便于SQL的书写，但是这样做的不好之处在于，每次都要拉取全部数据，很耗资源，耗时长，当数据量达到一定程度的时候，这样做根本是不行的。</p>
+<h1 id="全量"><a href="#全量" class="headerlink" title="全量"></a>全量</h1><p>常说的全量表：即当前时刻存放了所有的历史记录数据。 每一次在同步数据的时候，都要将全部的数据进行拉取，这样做的好处就是，每一次进行查询的时候，表里存放了所有的历史数据，不需要再和之前的数据进行关联，便于SQL的书写，但是这样做的不好之处在于，每次都要拉取全部数据，很耗资源，耗时长，当数据量达到一定程度的时候，这样做根本是不行的。</p>
 <p>对于一个全量表来说，可以总结成以下三点：</p>
 <p>（1）有无变化，都要报</p>
 <p>（2）每一次查询的时候都是所有的历史数据</p>
 <p>（3）只有一个分区</p>
-<h1 id="2-增量表"><a href="#2-增量表" class="headerlink" title="2.增量表"></a>2.增量表</h1><p> 新增数据，增量数据是上次导出之后的新数据。每一次同步的时候，只是将当天的变化数据进行同步，加入一个用户在昨天进行了一次操作，今天又进行了一次操作，那按照全量的意思来讲，今天在全量表中进行查询的时候其存在两条该用户的数据，而增量表在当天的分区中只有一条该用户的数据，昨天的那条用户数据需要在昨天的分区中进行查找。</p>
+<h1 id="增量表"><a href="#增量表" class="headerlink" title="增量表"></a>增量表</h1><p> 新增数据，增量数据是上次导出之后的新数据。每一次同步的时候，只是将当天的变化数据进行同步，加入一个用户在昨天进行了一次操作，今天又进行了一次操作，那按照全量的意思来讲，今天在全量表中进行查询的时候其存在两条该用户的数据，而增量表在当天的分区中只有一条该用户的数据，昨天的那条用户数据需要在昨天的分区中进行查找。</p>
 <p>因此，一个增量表有如下的几个特征:</p>
 <p> (1）记录每次增加的量，而不是总量；</p>
 <p> (2）增量表，只报变化量，无变化不用报</p>
@@ -419,9 +424,6 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2021/01/17/world/" rel="prev" title="">
-                  <i class="fa fa-chevron-left"></i> 
-                </a>
             </div>
             <div class="post-nav-item">
                 <a href="/2021/01/17/Flume%E6%97%A5%E5%BF%97%E9%87%87%E9%9B%86/" rel="next" title="Flume日志采集">

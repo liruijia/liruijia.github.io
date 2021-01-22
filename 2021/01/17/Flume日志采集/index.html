@@ -30,18 +30,18 @@
 <meta property="og:site_name" content="Liruijia&#39;s Blog">
 <meta property="og:description" content="Flume是cloudera开发的后来贡献给了Apache的一套用分布式，高可靠的，高可用的海量分布式日志采集、聚合和传输的系统，将大量日志数据从许多不同的源移动到一个集中的数据存储。其在日志文件进行采集过程中起到了很重要的作用，下面将对于进行详细介绍，并进行案例介绍！">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/img/flume1.png">
-<meta property="og:image" content="http://example.com/img/flume2.png">
-<meta property="og:image" content="http://example.com/img/flume3.png">
-<meta property="og:image" content="http://example.com/img/flume4.png">
-<meta property="og:image" content="http://example.com/img/flume5.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/1620989/202101/1620989-20210122225816353-596309472.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/1620989/202101/1620989-20210122225821153-557297293.png">
+<meta property="og:image" content="http://example.com/2021/01/17/Flume%E6%97%A5%E5%BF%97%E9%87%87%E9%9B%86/img/flume3.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/1620989/202101/1620989-20210122225931033-1937068728.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/1620989/202101/1620989-20210122225940383-582032821.png">
 <meta property="article:published_time" content="2021-01-17T13:11:15.000Z">
-<meta property="article:modified_time" content="2021-01-18T15:07:03.287Z">
+<meta property="article:modified_time" content="2021-01-22T14:59:45.952Z">
 <meta property="article:author" content="Liruijia">
 <meta property="article:tag" content="flume">
 <meta property="article:tag" content="HDFS">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/img/flume1.png">
+<meta name="twitter:image" content="https://img2020.cnblogs.com/blog/1620989/202101/1620989-20210122225816353-596309472.png">
 
 
 <link rel="canonical" href="http://example.com/2021/01/17/Flume%E6%97%A5%E5%BF%97%E9%87%87%E9%9B%86/">
@@ -140,7 +140,6 @@
         <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
         <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
         <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
-        <li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
@@ -197,7 +196,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Flume-%E6%97%A5%E5%BF%97%E9%87%87%E9%9B%86%E5%B7%A5%E5%85%B7"><span class="nav-number">1.</span> <span class="nav-text">Flume-日志采集工具</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Flume"><span class="nav-number">2.</span> <span class="nav-text">1.Flume</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-Flume-%E4%BB%8B%E7%BB%8D"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 Flume 介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-Flume%E7%BB%84%E4%BB%B6"><span class="nav-number">2.2.</span> <span class="nav-text">1.2 Flume组件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Flume%E5%AE%9E%E8%B7%B5"><span class="nav-number">3.</span> <span class="nav-text">2. Flume实践</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">3.1.</span> <span class="nav-text">2.1. 配置文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-1-Source-%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E"><span class="nav-number">3.1.1.</span> <span class="nav-text">2.1.1 Source 参数说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-2-Channels%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E"><span class="nav-number">3.1.2.</span> <span class="nav-text">2.1.2 Channels参数说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-3-Sink%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E"><span class="nav-number">3.1.3.</span> <span class="nav-text">2.1.3 Sink参数说明</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-%E8%BF%90%E8%A1%8CFlume"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 运行Flume</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Flume"><span class="nav-number">1.</span> <span class="nav-text">Flume</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Flume-%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.1.</span> <span class="nav-text">Flume 介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Flume%E7%BB%84%E4%BB%B6"><span class="nav-number">1.2.</span> <span class="nav-text">Flume组件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Flume%E5%AE%9E%E8%B7%B5"><span class="nav-number">2.</span> <span class="nav-text">Flume实践</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">2.1.</span> <span class="nav-text">配置文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Source-%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E"><span class="nav-number">2.1.1.</span> <span class="nav-text">Source 参数说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Channels%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E"><span class="nav-number">2.1.2.</span> <span class="nav-text">Channels参数说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sink%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E"><span class="nav-number">2.1.3.</span> <span class="nav-text">Sink参数说明</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%90%E8%A1%8CFlume"><span class="nav-number">2.2.</span> <span class="nav-text">运行Flume</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -213,7 +212,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-count">6</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -306,7 +305,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2021-01-18 23:07:03" itemprop="dateModified" datetime="2021-01-18T23:07:03+08:00">2021-01-18</time>
+        <time title="修改时间：2021-01-22 22:59:45" itemprop="dateModified" datetime="2021-01-22T22:59:45+08:00">2021-01-22</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -337,7 +336,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>9.1k</span>
+      <span>9k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -358,7 +357,7 @@
         <p>Flume是cloudera开发的后来贡献给了Apache的一套用分布式，高可靠的，高可用的海量分布式日志采集、聚合和传输的系统，将大量日志数据从许多不同的源移动到一个集中的数据存储。其在日志文件进行采集过程中起到了很重要的作用，下面将对于进行详细介绍，并进行案例介绍！</p>
 <a id="more"></a>
 
-<h1 id="Flume-日志采集工具"><a href="#Flume-日志采集工具" class="headerlink" title="Flume-日志采集工具"></a>Flume-日志采集工具</h1><h1 id="1-Flume"><a href="#1-Flume" class="headerlink" title="1.Flume"></a>1.Flume</h1><h2 id="1-1-Flume-介绍"><a href="#1-1-Flume-介绍" class="headerlink" title="1.1 Flume 介绍"></a>1.1 Flume 介绍</h2><p>​        Flume是cloudera开发的后来贡献给了Apache的一套用分布式，高可靠的，高可用的海量分布式日志采集、聚合和传输的系统，将大量日志数据从许多不同的源移动到一个集中的数据存储。<br>Apache Flume的使用不仅仅局限于日志数据聚合。由于数据源是可定制的，Flume可以用于传输大量事件数据，包括但不限于网络流量数据、社交媒体生成的数据、电子邮件消息和几乎所有可能的数据源。</p>
+<h1 id="Flume"><a href="#Flume" class="headerlink" title="Flume"></a>Flume</h1><h2 id="Flume-介绍"><a href="#Flume-介绍" class="headerlink" title="Flume 介绍"></a>Flume 介绍</h2><p>​        Flume是cloudera开发的后来贡献给了Apache的一套用分布式，高可靠的，高可用的海量分布式日志采集、聚合和传输的系统，将大量日志数据从许多不同的源移动到一个集中的数据存储。<br>Apache Flume的使用不仅仅局限于日志数据聚合。由于数据源是可定制的，Flume可以用于传输大量事件数据，包括但不限于网络流量数据、社交媒体生成的数据、电子邮件消息和几乎所有可能的数据源。</p>
 <p><strong>Flume的特点：</strong> </p>
 <p>（1）可以和任意集中式存储进行集成（HDFS，HBASE）</p>
 <p>（2）输入的数据速率大于写入存储目的地速率，flume会进行缓冲</p>
@@ -366,7 +365,7 @@
 <p>（4）   Flume中的事物基于channel，使用了两个事物模型（sender+receiver）,确保消息被可靠发送</p>
 <p>（5）   flume是 可靠的，容错的，可扩展的。</p>
 <p>（6）   flume易实现只需要简单的配置数据源以及存储端的相关信息即可，不需要写复杂的代码！！！</p>
-<h2 id="1-2-Flume组件"><a href="#1-2-Flume组件" class="headerlink" title="1.2 Flume组件"></a>1.2 Flume组件</h2><p>Flume 实现日志文件的采集，其主要是不断地去监听日志文件的变化，最后将日志文件中变化的数据流采集到HDFS中。如下图所示，Flume主要由3个部分组成：</p>
+<h2 id="Flume组件"><a href="#Flume组件" class="headerlink" title="Flume组件"></a>Flume组件</h2><p>Flume 实现日志文件的采集，其主要是不断地去监听日志文件的变化，最后将日志文件中变化的数据流采集到HDFS中。如下图所示，Flume主要由3个部分组成：</p>
 <ul>
 <li>Event：消息的基本单位，有header和body组成</li>
 <li>Agent：JVM进程，负责将一端外部来源产生的消息转 发到另一端外部的目的地<ul>
@@ -376,17 +375,15 @@
 </ul>
 </li>
 </ul>
-<p><img src="/img/flume1.png">    </p>
+<p><img src="https://img2020.cnblogs.com/blog/1620989/202101/1620989-20210122225816353-596309472.png">    </p>
 <p>那Flume到底是如何工作的呢？主要还是通过上面原型图将源源不断地数据流存储到外部，对于一条数据也就是事件流如下图所示过程实现采集。我们把一次source-channel-sink称为是一个agent。 </p>
-<p><img src="/img/flume2.png">  </p>
+<p><img src="https://img2020.cnblogs.com/blog/1620989/202101/1620989-20210122225821153-557297293.png">  </p>
 <p>  对于数据流，则是将不断产生的事件流最后进行汇总即可，如下所示：</p>
-<p><img src="/img/flume3.png">  </p>
-<h1 id="2-Flume实践"><a href="#2-Flume实践" class="headerlink" title="2. Flume实践"></a>2. Flume实践</h1><h2 id="2-1-配置文件"><a href="#2-1-配置文件" class="headerlink" title="2.1. 配置文件"></a>2.1. 配置文件</h2><p>​    Flume的实现则是通过配置conf文件即可完成数据的采集。如下所示，是一个flume配置文件。</p>
-<blockquote>
-<p>   Flume采集到HDFS - 使用exec source</p>
-</blockquote>
+<p><img src="img/flume3.png">  </p>
+<h1 id="Flume实践"><a href="#Flume实践" class="headerlink" title="Flume实践"></a>Flume实践</h1><h2 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h2><p>Flume的实现则是通过配置conf文件即可完成数据的采集。如下所示，是一个flume配置文件。</p>
+<p>Flume采集到HDFS - 使用exec source</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> a2 则为 这次 Flume 任务agent的名称</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> r2 则为 <span class="built_in">source</span> 名称</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> k2 - sink 名称</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> c2 - channel 名称</span></span><br><span class="line">a2.sources = r2</span><br><span class="line">a2.sinks = k2</span><br><span class="line">a2.channels = c2</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 配置<span class="built_in">source</span>的信息</span> </span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">type</span> - <span class="built_in">source</span> 类型</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">command</span> - 监听命令 监听的文件 XXX/XXX.log</span> </span><br><span class="line">a2.sources.r2.type = exec</span><br><span class="line">a2.sources.r2.command = tail -F XXX/XXX.log</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 配置sink信息</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">type</span> - 流出存储地</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> hdfs.path - hdfs 地址 数据按时间分区ds进行存放</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> rollInterval 按时间生成 HDFS 文件</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> rollCount：按写入的 event 的个数触发 roll，生成新的 HDFS 文件</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> fileType：指定保存到 HDFS 文件系统上的文件类型</span></span><br><span class="line"></span><br><span class="line">a2.sinks.k2.type = hdfs</span><br><span class="line">a2.sinks.k2.hdfs.path = hdfs://XXXXhdfsIP和端口/数据存储地址</span><br><span class="line">a2.sinks.k2.hdfs.rollInterval = 0</span><br><span class="line">a2.sinks.k2.hdfs.tollSize = 1024000</span><br><span class="line">a2.sinks.k2.hdfs.rollCount = 0</span><br><span class="line">a2.sinks.k2.hdfs.fileType = DataStream</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 时间拦截</span> </span><br><span class="line">a2.sinks.k2.hdfs.useLocalTimeStamp = true</span><br><span class="line">a2.sinks.k2.hdfs.callTimeout = 60000</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 设置channel  <span class="built_in">type</span> 以及 存储信息</span></span><br><span class="line">a2.channels.c2.type = memory</span><br><span class="line">a2.channels.c2.capacity = 1000</span><br><span class="line">a2.channels.c2.transactionCapacity = 100</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 将sink和<span class="built_in">source</span>通过channel 连接起来</span></span><br><span class="line">a2.sources.r2.channels = c2</span><br><span class="line">a2.sinks.k2.channel = c2</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h3 id="2-1-1-Source-参数说明"><a href="#2-1-1-Source-参数说明" class="headerlink" title="2.1.1 Source 参数说明"></a>2.1.1 Source 参数说明</h3><p>对接各种外部数据源，将收集到的事件发送到Channel中，一个source可以向多个channel发送event，Flume内置非常丰富的Source，同时用户可以自定义Source。针对不同的Source来不同的参数配置，下面给出了一些常用参数。</p>
+<h3 id="Source-参数说明"><a href="#Source-参数说明" class="headerlink" title="Source 参数说明"></a>Source 参数说明</h3><p>对接各种外部数据源，将收集到的事件发送到Channel中，一个source可以向多个channel发送event，Flume内置非常丰富的Source，同时用户可以自定义Source。针对不同的Source来不同的参数配置，下面给出了一些常用参数。</p>
 <table>
 <thead>
 <tr>
@@ -451,7 +448,7 @@
 <li>可以实时的监控指定一个或多个文件中的新增内容，由于该方式将数据的偏移量保存在一个指定的json文件中，即使在Agent挂掉或被kill也不会有数据的丢失，需要注意的是，该Source不能在Windows上使用。</li>
 </ul>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Property Name                      Default            Description</span><br><span class="line">channels@                             –  </span><br><span class="line">type@                                 –               指定类型：TAILDIR.</span><br><span class="line">filegroups@                           –               文件组的名称，多个空格分隔</span><br><span class="line">filegroups.&lt;filegroupName&gt;@           –               被监控文件的绝对路径</span><br><span class="line">positionFile         ~/.flume/taildir_position.json      存储数据偏移量路径</span><br><span class="line">headers.&lt;filegroupName&gt;.&lt;headerKey&gt;   –               Header key的名称</span><br><span class="line">byteOffsetHeader                    false             是否添加字节偏移量到key为‘byteoffset’值中</span><br><span class="line">skipToEnd                           false             当偏移量不能写入到文件时是否跳到文件结尾</span><br><span class="line">idleTimeout                         120000            关闭没有新增内容的文件超时时间（毫秒）</span><br><span class="line">writePosInterval                    3000              在positionfile 写入每一个文件lastposition的时间间隔</span><br><span class="line">batchSize                            100              批次处理行数</span><br><span class="line">fileHeader                          false             是否添加header存储文件绝对路径</span><br><span class="line">fileHeaderKey                       file              fileHeader启用时，使用的key</span><br></pre></td></tr></table></figure>
-<h3 id="2-1-2-Channels参数说明"><a href="#2-1-2-Channels参数说明" class="headerlink" title="2.1.2 Channels参数说明"></a>2.1.2 Channels参数说明</h3><p><strong>Memory Channel</strong></p>
+<h3 id="Channels参数说明"><a href="#Channels参数说明" class="headerlink" title="Channels参数说明"></a>Channels参数说明</h3><p><strong>Memory Channel</strong></p>
 <ul>
 <li>Memory Channel是使用内存来存储Event，使用内存的意味着数据传输速率会很快，但是当Agent挂掉后，存储在Channel中的数据将会丢失。</li>
 </ul>
@@ -461,7 +458,7 @@
 <li>File Channel使用磁盘来存储Event，速率相对于Memory Channel较慢，但数据不会丢失</li>
 </ul>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Property Name            Default                  Description    </span><br><span class="line">type@                      –                      类型指定：file.</span><br><span class="line">checkpointDir   ~/.flume/file-channel/checkpoint  checkpoint目录</span><br><span class="line">useDualCheckpoints       false                    备份checkpoint，为True，backupCheckpointDir必须设置</span><br><span class="line">backupCheckpointDir        –                      备份checkpoint目录</span><br><span class="line">dataDirs    ~/.flume/file-channel/data           数据存储所在的目录设置</span><br><span class="line">transactionCapacity      10000                    Event存储最大值</span><br><span class="line">checkpointInterval       30000                    checkpoint间隔时间</span><br><span class="line">maxFileSize            2146435071                 单一日志最大设置字节数</span><br><span class="line">minimumRequiredSpace    524288000                 最小的请求闲置空间（以字节为单位）</span><br><span class="line">capacity                 1000000                  Channel最大容量</span><br><span class="line">keep-alive                 3                      一个存放操作的等待时间值（秒）</span><br><span class="line">use-log-replay-v1         false                   Expert: 使用老的回复逻辑</span><br><span class="line">use-fast-replay           false                   Expert: 回复不需要队列</span><br><span class="line">checkpointOnClose         true         </span><br></pre></td></tr></table></figure>
-<h3 id="2-1-3-Sink参数说明"><a href="#2-1-3-Sink参数说明" class="headerlink" title="2.1.3 Sink参数说明"></a>2.1.3 Sink参数说明</h3><p>Flume常用Sinks有Log Sink，HDFS Sink，Avro Sink，Kafka Sink，当然也可以自定义Sink。</p>
+<h3 id="Sink参数说明"><a href="#Sink参数说明" class="headerlink" title="Sink参数说明"></a>Sink参数说明</h3><p>Flume常用Sinks有Log Sink，HDFS Sink，Avro Sink，Kafka Sink，当然也可以自定义Sink。</p>
 <p><strong>Logger Sink</strong> </p>
 <ul>
 <li>Logger Sink以INFO 级别的日志记录到log日志中，这种方式通常用于测试。</li>
@@ -479,14 +476,12 @@
 <li>传输数据到Kafka中，需要注意的是Flume版本和Kafka版本的兼容性</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Property Name              Default             Description</span><br><span class="line">type                         –                 指定类型：org.apache.flume.sink.kafka.KafkaSink</span><br><span class="line">kafka.bootstrap.servers      –                 kafka服务地址</span><br><span class="line">kafka.topic          default-flume-topic       kafka Topic</span><br><span class="line">flumeBatchSize              100                批次写入kafka Event数</span><br><span class="line">kafka.producer.acks          1                 多少个副本确认后才能确定消息传递成功，0表示不需要确认</span><br><span class="line">                                               1表示只需要首要的副本得到确认，-1表示等待所有确认。</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="2-2-运行Flume"><a href="#2-2-运行Flume" class="headerlink" title="2.2 运行Flume"></a>2.2 运行Flume</h2><p>执行如下命令来开始Flume任务：</p>
+<h2 id="运行Flume"><a href="#运行Flume" class="headerlink" title="运行Flume"></a>运行Flume</h2><p>执行如下命令来开始Flume任务：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flume-ng agent --conf flume-conf 配置路径 --conf-file 采集任务配置文件 -name agent名 -Dflume.root.logger&#x3D;INFO,console</span><br></pre></td></tr></table></figure>
 <p>如下图所示，说明Flume开始了采集任务，</p>
-<p><img src="/img/flume4.png">  </p>
+<p><img src="https://img2020.cnblogs.com/blog/1620989/202101/1620989-20210122225931033-1937068728.png">  </p>
 <p>如下图，是通过jar包产生的一组测试数据，当flume开始工作的时候，会不断输出如下所示数据流信息，同时将采集到数据存储到hdfs路径下，后面的后拽则是相应在HDFS中的文件名。</p>
-<p><img src="/img/flume5.png"></p>
+<p><img src="https://img2020.cnblogs.com/blog/1620989/202101/1620989-20210122225940383-582032821.png"></p>
 <p>   对于flume任务来说，在设定时间限制的情况下，不需要专门的去停止flume任务，否则利用ctrl+z强制停止，然后再使用kill 命令去kill掉进程，<code>ps -ef | grep XXX.conf</code> 利用该命令去查询相应的进程 然后kill即可。</p>
 <p>​    主要是第一次使用Flume工具，因此，有很多的不懂，整个过程虽然简单，但是还是磕磕绊绊吧。下面篇我们利用Java来产生大量日志数据（继而调用相应的jar包  并通过flume监听 采集到HDFS中）。</p>
 
