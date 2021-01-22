@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//unpkg.com/@fortawesome/fontawesome-free@5.15.1/css/all.min.css">
+  <link rel="stylesheet" href="//unpkg.com/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","version":"8.2.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"manual"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+<meta name="description" content="Flink 提供了丰富的客户端操作来提交任务和与任务进行交互，包括 Flink 命令行，Scala Shell，SQL Client，Restful API 和 Web。Flink 首先提供的最重要的是命令行，其次是 SQL Client 用于提交 SQL 任务的运行，还有就是 Scala Shell 提交 Table API 的任务。同时，Flink 也提供了 Restful 服务，用户可以通过">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flink-DataStream API 学习">
+<meta property="og:url" content="http://example.com/2021/01/17/Flink-DataStream%20API%20%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="Liruijia&#39;s Blog">
+<meta property="og:description" content="Flink 提供了丰富的客户端操作来提交任务和与任务进行交互，包括 Flink 命令行，Scala Shell，SQL Client，Restful API 和 Web。Flink 首先提供的最重要的是命令行，其次是 SQL Client 用于提交 SQL 任务的运行，还有就是 Scala Shell 提交 Table API 的任务。同时，Flink 也提供了 Restful 服务，用户可以通过">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/1792867/1609076902383-c5355879-b6e9-49bd-becf-6ffbdefde447.png#align=left&display=inline&height=731&margin=%5Bobject%20Object%5D&name=image.png&originHeight=731&originWidth=980&size=205246&status=done&style=none&width=980">
+<meta property="article:published_time" content="2021-01-17T13:11:15.000Z">
+<meta property="article:modified_time" content="2021-01-17T14:18:00.676Z">
+<meta property="article:author" content="Liruijia">
+<meta property="article:tag" content="Flink">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2020/png/1792867/1609076902383-c5355879-b6e9-49bd-becf-6ffbdefde447.png#align=left&display=inline&height=731&margin=%5Bobject%20Object%5D&name=image.png&originHeight=731&originWidth=980&size=205246&status=done&style=none&width=980">
+
+
+<link rel="canonical" href="http://example.com/2021/01/17/Flink-DataStream%20API%20%E5%AD%A6%E4%B9%A0/">
+
+
+<script data-pjax class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+<title>Flink-DataStream API 学习 | Liruijia's Blog</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Liruijia's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Liruijia's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Hello world</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+        <li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Flink-DataStream-API-%E5%AD%A6%E4%B9%A0"><span class="nav-number">1.</span> <span class="nav-text">Flink-DataStream API 学习</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80-%E6%95%B0%E6%8D%AE%E8%AF%BB%E5%8F%96"><span class="nav-number">2.</span> <span class="nav-text">一. 数据读取</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-fromElements"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 fromElements</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-readTextFile"><span class="nav-number">2.2.</span> <span class="nav-text">1.2 readTextFile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-addsource"><span class="nav-number">2.3.</span> <span class="nav-text">1.3 addsource</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C-%E8%BD%AC%E6%8D%A2%E7%AE%97%E5%AD%90"><span class="nav-number">3.</span> <span class="nav-text">二. 转换算子</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E5%9F%BA%E6%9C%AC%E8%BD%AC%E6%8D%A2%E7%AE%97%E5%AD%90"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 基本转换算子</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-1-Map"><span class="nav-number">3.1.1.</span> <span class="nav-text">2.1.1 Map</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-2-FILTER"><span class="nav-number">3.1.2.</span> <span class="nav-text">2.1.2 FILTER</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-3-FLATMAP"><span class="nav-number">3.1.3.</span> <span class="nav-text">2.1.3 FLATMAP</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-%E9%94%AE%E6%8E%A7%E6%B5%81%E8%BD%AC%E6%8D%A2%E7%AE%97%E5%AD%90"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 键控流转换算子</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-1-keyby-%E2%80%94-%E5%88%86%E6%B5%81"><span class="nav-number">3.2.1.</span> <span class="nav-text">2.2.1 keyby — 分流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-2-%E6%BB%9A%E5%8A%A8%E8%81%9A%E5%90%88%E7%AE%97%E5%AD%90-%E2%80%94-%E8%81%9A%E5%90%88"><span class="nav-number">3.2.2.</span> <span class="nav-text">2.2.2 滚动聚合算子 — 聚合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-3-REDUCE-%E2%80%94-%E6%B3%9B%E5%8C%96%E6%BB%9A%E5%8A%A8%E8%81%9A%E5%90%88"><span class="nav-number">3.2.3.</span> <span class="nav-text">2.2.3 REDUCE —  泛化滚动聚合</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-%E5%A4%9A%E6%B5%81%E8%BD%AC%E6%8D%A2%E7%AE%97%E5%AD%90"><span class="nav-number">3.3.</span> <span class="nav-text">2.3 多流转换算子</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-1-UNION"><span class="nav-number">3.3.1.</span> <span class="nav-text">2.3.1 UNION</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-2-CONNECT-COMAP%E5%92%8CCOFLATMAP"><span class="nav-number">3.3.2.</span> <span class="nav-text">2.3.2 CONNECT, COMAP和COFLATMAP</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-%E5%88%86%E5%B8%83%E5%BC%8F%E8%BD%AC%E6%8D%A2%E7%AE%97%E5%AD%90"><span class="nav-number">3.4.</span> <span class="nav-text">2.4 分布式转换算子</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-1-Random"><span class="nav-number">3.4.1.</span> <span class="nav-text">2.4.1 Random</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-2-Round-Robin"><span class="nav-number">3.4.2.</span> <span class="nav-text">2.4.2 Round-Robin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-3-Rescale"><span class="nav-number">3.4.3.</span> <span class="nav-text">2.4.3 Rescale</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-4-broadcast"><span class="nav-number">3.4.4.</span> <span class="nav-text">2.4.4 broadcast</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-5-Global"><span class="nav-number">3.4.5.</span> <span class="nav-text">2.4.5 Global</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-6-Custom"><span class="nav-number">3.4.6.</span> <span class="nav-text">2.4.6 Custom</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89-%E7%A4%BA%E4%BE%8B"><span class="nav-number">4.</span> <span class="nav-text">三. 示例</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Liruijia"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Liruijia</p>
+  <div class="site-description" itemprop="description">记录一次一次的爬坑经历！！！</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/liruijia" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;liruijia" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:2406891860@qq.com" title="E-Mail → mailto:2406891860@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.cnblogs.com/learn-ruijiali/" title="Cnblogs → https:&#x2F;&#x2F;www.cnblogs.com&#x2F;learn-ruijiali&#x2F;" rel="noopener" target="_blank"><i class="fab fa-blog fa-fw"></i>Cnblogs</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/17/Flink-DataStream%20API%20%E5%AD%A6%E4%B9%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Liruijia">
+      <meta itemprop="description" content="记录一次一次的爬坑经历！！！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Liruijia's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Flink-DataStream API 学习
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2021-01-17 21:11:15 / 修改时间：22:18:00" itemprop="dateCreated datePublished" datetime="2021-01-17T21:11:15+08:00">2021-01-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">大数据学习</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AD%A6%E4%B9%A0/Flink/" itemprop="url" rel="index"><span itemprop="name">Flink</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>13k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>12 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>Flink 提供了丰富的客户端操作来提交任务和与任务进行交互，包括 Flink 命令行，Scala Shell，SQL Client，Restful API 和 Web。Flink 首先提供的最重要的是命令行，其次是 SQL Client 用于提交 SQL 任务的运行，还有就是 Scala Shell 提交 Table API 的任务。同时，Flink 也提供了 Restful 服务，用户可以通过 http 方式进行调用。此外，还有 Web 的方式可以提交任务。</p>
+<a id="more"></a>
+
+<h1 id="Flink-DataStream-API-学习"><a href="#Flink-DataStream-API-学习" class="headerlink" title="Flink-DataStream API 学习"></a>Flink-DataStream API 学习</h1><p> 在之前写过，Flink DataStream API 在进行实时计算的时候，需要先建立相应的DAG环境，然后进行DataStream的读取，进而进行相应的数据实时统计 ！！！</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();</span><br></pre></td></tr></table></figure>
+<p>参考： <code>https://xieyuanpeng.com/2019/02/05/flink-learning-3/</code></p>
+<h1 id="一-数据读取"><a href="#一-数据读取" class="headerlink" title="一. 数据读取"></a>一. 数据读取</h1><h2 id="1-1-fromElements"><a href="#1-1-fromElements" class="headerlink" title="1.1 fromElements"></a>1.1 fromElements</h2><p>从批中读取数据</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">DataStream&lt;SensorReading&gt; stream = env</span><br><span class="line">  .fromElements(</span><br><span class="line">    <span class="keyword">new</span> SensorReading(<span class="string">&quot;sensor_1&quot;</span>, <span class="number">1547718199</span>, <span class="number">35.80018327300259</span>),</span><br><span class="line">    <span class="keyword">new</span> SensorReading(<span class="string">&quot;sensor_6&quot;</span>, <span class="number">1547718199</span>, <span class="number">15.402984393403084</span>),</span><br><span class="line">    <span class="keyword">new</span> SensorReading(<span class="string">&quot;sensor_7&quot;</span>, <span class="number">1547718199</span>, <span class="number">6.720945201171228</span>),</span><br><span class="line">    <span class="keyword">new</span> SensorReading(<span class="string">&quot;sensor_10&quot;</span>, <span class="number">1547718199</span>, <span class="number">38.101067604893444</span>)</span><br><span class="line">  )</span><br><span class="line"> <span class="comment">// SensorReading 数据流的类型</span></span><br><span class="line"> SensorReading(<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="1-2-readTextFile"><a href="#1-2-readTextFile" class="headerlink" title="1.2 readTextFile"></a>1.2 readTextFile</h2><p>从文件中读取数据</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 直接通过相应的路径</span></span><br><span class="line">DataStream&lt;String&gt; stream = env.readTextFile(filePath);</span><br><span class="line"><span class="comment">// 通过参数params传入</span></span><br><span class="line">carData = env.readTextFile(params.get(<span class="string">&quot;input&quot;</span>)).map(<span class="keyword">new</span> TopSpeedWindowing.ParseCarData())</span><br></pre></td></tr></table></figure>
+<h2 id="1-3-addsource"><a href="#1-3-addsource" class="headerlink" title="1.3 addsource"></a>1.3 addsource</h2><p>addcource 添加数据源，可以添加自定义的数据源</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">DataStream&lt;String&gt; text = env.addSource(<span class="keyword">new</span> DataSource())</span><br><span class="line"><span class="comment">// DataSource为一个自定义的获取数据的函数，在进行自定义的时候，需要使用RichParallelSourceFunction这个方法</span></span><br></pre></td></tr></table></figure>
+<p><strong>SensorSource类：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 自定义数据源</span></span><br><span class="line"><span class="comment">// 自定义数据源，需要完成run &amp; cancel 方法</span></span><br><span class="line"><span class="comment">// 示例1 </span></span><br><span class="line"><span class="keyword">import</span> org.apache.flink.streaming.api.functions.source.RichParallelSourceFunction;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Calendar;</span><br><span class="line"><span class="keyword">import</span> java.util.Random;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SensorSource</span> <span class="keyword">extends</span> <span class="title">RichParallelSourceFunction</span>&lt;<span class="title">SensorReading</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> running = <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="comment">// SensorReading 最后输出的数据流 类型， srcCtx 用来提交最后的数据流</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">(SourceContext&lt;SensorReading&gt; srcCtx)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">        Random rand = <span class="keyword">new</span> Random();</span><br><span class="line"></span><br><span class="line">        String[] sensorIds = <span class="keyword">new</span> String[<span class="number">10</span>];</span><br><span class="line">        <span class="keyword">double</span>[] curFTemp = <span class="keyword">new</span> <span class="keyword">double</span>[<span class="number">10</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">            sensorIds[i] = <span class="string">&quot;sensor_&quot;</span> + i;</span><br><span class="line">            curFTemp[i] = <span class="number">65</span> + (rand.nextGaussian() * <span class="number">20</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (running) &#123;</span><br><span class="line">            <span class="keyword">long</span> curTime = Calendar.getInstance().getTimeInMillis();</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">                curFTemp[i] += rand.nextGaussian() * <span class="number">0.5</span>;</span><br><span class="line">                srcCtx.collect(<span class="keyword">new</span> SensorReading(sensorIds[i], curTime, curFTemp[i]));</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            Thread.sleep(<span class="number">100</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cancel</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.running = <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 示例2</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GroupedProcessingTimeWindowSample</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 模拟数据源  extends - 继承 数据源</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">DataSource</span> <span class="keyword">extends</span> <span class="title">RichParallelSourceFunction</span>&lt;<span class="title">Tuple2</span>&lt;<span class="title">String</span>, <span class="title">Integer</span>&gt;&gt; </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">boolean</span> isRunning = <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="comment">// Flink 在运行时对 Source 会直接调用该方法，该方法需要不断的输出数据，从而形成初始的流</span></span><br><span class="line">        <span class="comment">// 随机的产生商品类别和交易量的数据</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">(SourceContext&lt;Tuple2&lt;String, Integer&gt;&gt; ctx)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">            Random random = <span class="keyword">new</span> Random();</span><br><span class="line">            <span class="keyword">while</span> (isRunning) &#123;</span><br><span class="line">                <span class="comment">//getRuntimeContext()方法提供了函数的RuntimeContext的一些信息，例如函数执行的并行度，任务的名字，以及state状态</span></span><br><span class="line">                Thread.sleep((getRuntimeContext().getIndexOfThisSubtask() + <span class="number">1</span>) * <span class="number">1000</span> * <span class="number">5</span>); <span class="comment">// 不知道 是否可以看作是window</span></span><br><span class="line">                String key = <span class="string">&quot;类别&quot;</span> + (<span class="keyword">char</span>) (<span class="string">&#x27;A&#x27;</span> + random.nextInt(<span class="number">3</span>));</span><br><span class="line">                <span class="keyword">int</span> value = random.nextInt(<span class="number">10</span>) + <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">                System.out.println(String.format(<span class="string">&quot;Emits\t(%s, %d)&quot;</span>, key, value));</span><br><span class="line">                <span class="comment">// 将结果通过ctx.collect 方法进行发送</span></span><br><span class="line">                ctx.collect(<span class="keyword">new</span> Tuple2&lt;String , Integer&gt;(key, value));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="comment">// 当 Flink 需要 Cancel Source Task 的时候会调用该方法</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cancel</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            isRunning = <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h1 id="二-转换算子"><a href="#二-转换算子" class="headerlink" title="二. 转换算子"></a>二. 转换算子</h1><p>DataStream API针对大多数数据转换操作提供了转换算子。如果你很熟悉批处理API、函数式编程语言或者SQL，那么你将会发现这些API很容易学习。我们会将DataStream API的转换算子分成四类：</p>
+<ul>
+<li><strong>基本转换算子</strong>：将会作用在数据流中的每一条单独的数据上。</li>
+<li><strong>KeyedStream转换算子</strong>：在数据有key的情况下，对数据应用转换算子。</li>
+<li><strong>多流转换算子</strong>：合并多条流为一条流或者将一条流分割为多条流。</li>
+<li><strong>分布式转换算子</strong>：将重新组织流里面的事件。</li>
+</ul>
+<h2 id="2-1-基本转换算子"><a href="#2-1-基本转换算子" class="headerlink" title="2.1 基本转换算子"></a>2.1 基本转换算子</h2><p>基本转换算子会针对流中的每一个单独的事件做处理，也就是说每一个输入数据会产生一个输出数据。单值转换，数据的分割，数据的过滤，都是基本转换操作的典型例子</p>
+<h3 id="2-1-1-Map"><a href="#2-1-1-Map" class="headerlink" title="2.1.1 Map"></a>2.1.1 Map</h3><p><code>map</code>算子通过调用<code>DataStream.map()</code>来指定。<code>map</code>算子的使用将会产生一条新的数据流。它会将每一个输入的事件传送到一个用户自定义的mapper，这个mapper只返回一个输出事件，这个输出事件和输入事件的类型可能不一样。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 行内函数 map 函数 ，它使用 Lambda 表达式进行相应的计算</span></span><br><span class="line"><span class="comment">// 1:1</span></span><br><span class="line">env.fromElements(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line">    .map(i -&gt; Tuple2.of(i, i))</span><br><span class="line">    .returns(Types.TUPLE(Types.INT, Types.INT))</span><br><span class="line">    .print();</span><br><span class="line"><span class="comment">// 上面这段代码， 数据为1 2 3 ,map 进行映射处理 计算i-&gt;i*i , 最后进行返回，数据格式限制成int ,print打印结果</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-1-2-FILTER"><a href="#2-1-2-FILTER" class="headerlink" title="2.1.2 FILTER"></a>2.1.2 FILTER</h3><p><code>filter</code>转换算子通过在每个输入事件上对一个布尔条件进行求值来过滤掉一些元素，然后将剩下的元素继续发送。一个<code>true</code>的求值结果将会把输入事件保留下来并发送到输出，而如果求值结果为<code>false</code>，则输入事件会被抛弃掉。我们通过调用<code>DataStream.filter()</code>来指定流的<code>filter</code>算子，<code>filter</code>操作将产生一条新的流，其类型和输入流中的事件类型是一样的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1:1</span></span><br><span class="line">DataStream&lt;SensorReading&gt; filteredReadings = readings.filter(r -&gt; r.temperature &gt;= <span class="number">25</span>);</span><br></pre></td></tr></table></figure>
+<h3 id="2-1-3-FLATMAP"><a href="#2-1-3-FLATMAP" class="headerlink" title="2.1.3 FLATMAP"></a>2.1.3 FLATMAP</h3><p><code>flatMap</code>算子和<code>map</code>算子很类似，不同之处在于针对每一个输入事件<code>flatMap</code>可以生成0个、1个或者多个输出元素。事实上，<code>flatMap</code>转换算子是<code>filter</code>和<code>map</code>的泛化。所以<code>flatMap</code>可以实现<code>map</code>和<code>filter</code>算子的功能。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// T: the type of input elements</span></span><br><span class="line"><span class="comment">// O: the type of output elements</span></span><br><span class="line"><span class="comment">// 最后的输出是一个Collector集合</span></span><br><span class="line">FlatMapFunction[T, O]</span><br><span class="line">    &gt; flatMap(T, Collector[O]): Unit</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">IdSplitter</span> <span class="keyword">implements</span> <span class="title">FlatMapFunction</span>&lt;<span class="title">String</span>, <span class="title">String</span>&gt; </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">flatMap</span><span class="params">(String id, Collector&lt;String&gt; out)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        String[] splits = id.split(<span class="string">&quot;_&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (String split : splits) &#123;</span><br><span class="line">            out.collect(split);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 此时调用的时候</span></span><br><span class="line">DataStream.flatMap(<span class="keyword">new</span> IdSplitter())</span><br><span class="line"></span><br><span class="line"><span class="comment">// 匿名函数的写法  </span></span><br><span class="line">DataStream&lt;String&gt; splitIds = sensorIds</span><br><span class="line">        .flatMap((FlatMapFunction&lt;String, String&gt;) <span class="comment">// 函数名，输入的格式</span></span><br><span class="line">                (id, out) -&gt; &#123; <span class="keyword">for</span> (String s: id.split(<span class="string">&quot;_&quot;</span>)) &#123; out.collect(s);&#125;&#125;)</span><br><span class="line">        <span class="comment">// provide result type because Java cannot infer return type of lambda function</span></span><br><span class="line">        <span class="comment">// 提供结果的类型，因为Java无法推断匿名函数的返回值类型</span></span><br><span class="line">        .returns(Types.STRING); <span class="comment">// 返回结果</span></span><br></pre></td></tr></table></figure>
+<h2 id="2-2-键控流转换算子"><a href="#2-2-键控流转换算子" class="headerlink" title="2.2 键控流转换算子"></a>2.2 键控流转换算子</h2><p>很多流处理程序的一个基本要求就是要能对数据进行分组，分组后的数据共享某一个相同的属性。<code>DataStream API</code>提供了一个叫做<code>KeyedStream</code>的抽象，此抽象会从逻辑上对<code>DataStream</code>进行分区，分区后的数据拥有同样的<code>Key</code>值，分区后的流互不相关。<br>针对<code>KeyedStream</code>的状态转换操作可以读取数据或者写入数据到当前事件<code>Key</code>所对应的状态中。这表明拥有同样<code>Key</code>的所有事件都可以访问同样的状态，也就是说所以这些事件可以一起处理。<br><code>KeyedStream</code>可以使用<code>map</code>，<code>flatMap</code>和<code>filter</code>算子来处理。接下来我们会使用<code>keyBy</code>算子来将<code>DataStream</code>转换成<code>KeyedStream</code>.</p>
+<h3 id="2-2-1-keyby-—-分流"><a href="#2-2-1-keyby-—-分流" class="headerlink" title="2.2.1 keyby — 分流"></a>2.2.1 keyby — 分流</h3><p><code>keyBy</code>通过指定<code>key</code>来将<code>DataStream</code>转换成<code>KeyedStream</code>,基于不同的<code>key</code>，流中的事件将被分配到不同的分区中去。所有具有相同<code>key</code>的事件将会在接下来的操作符的同一个子任务槽中进行处理。拥有不同<code>key</code>的事件可以在同一个任务中处理。但是算子只能访问当前事件的key所对应的状态。<br><code>keyBy()</code>方法接收一个参数，这个参数指定了key或者keys，有很多不同的方法来指定key。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">KeyedStream&lt;SensorReading, String&gt; keyed = readings.keyBy(r -&gt; r.id); <span class="comment">// 指定按照r.id为分组依据</span></span><br><span class="line"></span><br><span class="line">st = stream.flatMap().keyby() </span><br><span class="line"><span class="comment">// 对stream进行flatmap中相应的处理之后，利用keyby分组 这个分组指的是对于进来的数据流进行分流 分到不同的流中进行计算</span></span><br></pre></td></tr></table></figure>
+<p>基于<code>key</code>的两种操作：滚动聚合和<code>reduce</code>算子，滚动聚合算子由<code>KeyedStream</code>调用，并生成一个聚合以后的<code>DataStream</code>，例如：<code>sum</code>，<code>minimum</code>，<code>maximum</code>。一个滚动聚合算子会为每一个观察到的<code>key</code>保存一个聚合的值。</p>
+<h3 id="2-2-2-滚动聚合算子-—-聚合"><a href="#2-2-2-滚动聚合算子-—-聚合" class="headerlink" title="2.2.2 滚动聚合算子 — 聚合"></a>2.2.2 滚动聚合算子 — 聚合</h3><p>常用的滚动聚合算子有：</p>
+<ul>
+<li>sum()：在输入流上对指定的字段做滚动相加操作。</li>
+<li>min()： 在输入流上对指定的字段求最小值。</li>
+<li>max()： 在输入流上对指定的字段求最大值。</li>
+<li>minBy()：在输入流上针对指定字段求最小值，并返回包含当前观察到的最小值的事件。</li>
+<li>maxBy()：在输入流上针对指定字段求最大值，并返回包含当前观察到的最大值的事件。</li>
+</ul>
+<p>滚动聚合算子无法组合起来使用，每次计算只能使用一个单独的滚动聚合算子。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">DataStream&lt;Tuple3&lt;Integer, Integer, Integer&gt;&gt; inputStream = env.fromElements(<span class="keyword">new</span> Tuple3(<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>), <span class="keyword">new</span> Tuple3(<span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>), <span class="keyword">new</span> Tuple3(<span class="number">2</span>, <span class="number">2</span>, <span class="number">4</span>), <span class="keyword">new</span> Tuple3(<span class="number">1</span>, <span class="number">5</span>, <span class="number">3</span>));</span><br><span class="line"><span class="comment">// 数据流：</span></span><br><span class="line"><span class="comment">// 1, 2, 2 </span></span><br><span class="line"><span class="comment">// 2, 3, 1</span></span><br><span class="line"><span class="comment">// 2, 2, 4</span></span><br><span class="line"><span class="comment">// 1，5，3</span></span><br><span class="line"></span><br><span class="line">DataStream&lt;Tuple3&lt;Integer, Integer, Integer&gt;&gt; resultStream = inputStream</span><br><span class="line">  .keyBy(<span class="number">0</span>) <span class="comment">// key on first field of the tuple  经过这一步之后，1 2 2 / 1 5 3进入了同一个算子代码槽中进行计算</span></span><br><span class="line">  .sum(<span class="number">1</span>);   <span class="comment">// sum the second field of the tuple in place</span></span><br><span class="line">最后的结果为： </span><br><span class="line">key , sum ,<span class="keyword">else</span> </span><br><span class="line">key = <span class="number">1</span> 时的结果： <span class="number">1</span> <span class="number">2</span> <span class="number">2</span> ,<span class="number">1</span> <span class="number">7</span> <span class="number">2</span> 随着数据流不断地进入 不断地进行累加</span><br><span class="line">key = <span class="number">2</span> 时的结果： <span class="number">2</span> <span class="number">3</span> <span class="number">1</span> , <span class="number">2</span> <span class="number">5</span> <span class="number">1</span> 第三个字段未定义</span><br></pre></td></tr></table></figure>
+<p>滚动聚合操作会对每一个key都保存一个状态。因为状态从来不会被清空，所以我们在使用滚动聚合算子时只能使用在含有有限个key的流上面。</p>
+<h3 id="2-2-3-REDUCE-—-泛化滚动聚合"><a href="#2-2-3-REDUCE-—-泛化滚动聚合" class="headerlink" title="2.2.3 REDUCE —  泛化滚动聚合"></a>2.2.3 REDUCE —  泛化滚动聚合</h3><p><code>reduce</code>算子是滚动聚合的泛化实现。它将一个<code>ReduceFunction</code>应用到了一个<code>KeyedStream</code>上面去。<code>reduce</code>算子将会把每一个输入事件和当前已经<code>reduce</code>出来的值做聚合计算。<code>reduce</code>操作不会改变流的事件类型。输出流数据类型和输入流数据类型是一样的。<br><code>reduce</code>函数可以通过实现接口<code>ReduceFunction</code>来创建一个类。<code>ReduceFunction</code>接口定义了<code>reduce()</code>方法，此方法接收两个输入事件，输入一个相同类型的事件。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// T: the element type</span></span><br><span class="line">ReduceFunction[T]</span><br><span class="line">    &gt; reduce(T, T): T</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">DataStream&lt;SensorReading&gt; maxTempPerSensor = keyestream</span><br><span class="line">        .reduce((r1, r2) -&gt; &#123;</span><br><span class="line">            <span class="keyword">if</span> (r1.temperature &gt; r2.temperature) &#123;</span><br><span class="line">                <span class="keyword">return</span> r1;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> r2;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br></pre></td></tr></table></figure>
+<h2 id="2-3-多流转换算子"><a href="#2-3-多流转换算子" class="headerlink" title="2.3 多流转换算子"></a>2.3 多流转换算子</h2><p>许多应用需要摄入多个流并将流合并处理，还可能需要将一条流分割成多条流然后针对每一条流应用不同的业务逻辑</p>
+<h3 id="2-3-1-UNION"><a href="#2-3-1-UNION" class="headerlink" title="2.3.1 UNION"></a>2.3.1 <em>UNION</em></h3><p>DataStream.union()方法将两条或者多条DataStream合并成一条具有与输入流相同类型的输出DataStream。事件合流的方式为FIFO方式。操作符并不会产生一个特定顺序的事件流。union操作符也不会进行去重。每一个输入事件都被发送到了下一个操作符。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">DataStream&lt;SensorReading&gt; parisStream = ...</span><br><span class="line">DataStream&lt;SensorReading&gt; tokyoStream = ...</span><br><span class="line">DataStream&lt;SensorReading&gt; rioStream = ...</span><br><span class="line">DataStream&lt;SensorReading&gt; allCities = parisStream.union(tokyoStream, rioStream)</span><br></pre></td></tr></table></figure>
+<h3 id="2-3-2-CONNECT-COMAP和COFLATMAP"><a href="#2-3-2-CONNECT-COMAP和COFLATMAP" class="headerlink" title="2.3.2 CONNECT, COMAP和COFLATMAP"></a>2.3.2 CONNECT, COMAP和COFLATMAP</h3><p>　联合两条流的事件是非常常见的流处理需求。例如监控一片森林然后发出高危的火警警报。报警的Application接收两条流，一条是温度传感器传回来的数据，一条是烟雾传感器传回来的数据。当两条流都超过各自的阈值时，报警。<br><code>DataStream API</code>提供了<code>connect</code>操作来支持以上的应用场景。<code>DataStream.connect()</code>方法接收一条<code>DataStream</code>，然后返回一个<code>ConnectedStreams</code>类型的对象，这个对象表示了两条连接的流。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// first stream</span></span><br><span class="line">DataStream&lt;Integer&gt; first = ...</span><br><span class="line"><span class="comment">// second stream</span></span><br><span class="line">DataStream&lt;String&gt; second = ...</span><br><span class="line"></span><br><span class="line"><span class="comment">// connect streams 后面&lt;&gt;里添加的是 两个连接的 数据流的类型</span></span><br><span class="line">ConnectedStreams&lt;Integer, String&gt; connected = first.connect(second);</span><br></pre></td></tr></table></figure>
+<p><code>ConnectedStreams</code>提供了<code>map()</code>和<code>flatMap()</code>方法，分别需要接收类型为<code>CoMapFunction</code>和<code>CoFlatMapFunction</code>的参数。以上两个函数里面的泛型是第一条流的事件类型和第二条流的事件类型，以及输出流的事件类型。还定义了两个方法，每一个方法针对一条流来调用。<code>map1()</code>和<code>flatMap1()</code>会调用在第一条流的元素上面，<code>map2()</code>和<code>flatMap2()</code>会调用在第二条流的元素上面。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// IN1: 第一条流的事件类型</span></span><br><span class="line"><span class="comment">// IN2: 第二条流的事件类型</span></span><br><span class="line"><span class="comment">// OUT: 输出流的事件类型</span></span><br><span class="line">CoMapFunction[IN1, IN2, OUT]</span><br><span class="line">    &gt; map1(IN1): OUT</span><br><span class="line">    &gt; map2(IN2): OUT</span><br><span class="line"></span><br><span class="line">CoFlatMapFunction[IN1, IN2, OUT]</span><br><span class="line">    &gt; flatMap1(IN1, Collector[OUT]): Unit</span><br><span class="line">    &gt; flatMap2(IN2, Collector[OUT]): Unit</span><br></pre></td></tr></table></figure>
+<p>对两条流做连接查询通常需要这两条流基于某些条件被确定性的路由到操作符中相同的并行实例里面去。在默认情况下，<code>connect()</code>操作将不会对两条流的事件建立任何关系，所以两条流的事件将会随机的被发送到下游的算子实例里面去。这样的行为会产生不确定性的计算结果，显然不是我们想要的。为了针对<code>ConnectedStreams</code>进行确定性的转换操作，<code>connect()</code>方法可以和<code>keyBy()</code>或者<code>broadcast()</code>组合起来使用。</p>
+<ul>
+<li><p><strong>与keyby()</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">DataStream&lt;Tuple2&lt;Integer, Long&gt;&gt; one = ...</span><br><span class="line">DataStream&lt;Tuple2&lt;Integer, String&gt;&gt; two = ...</span><br><span class="line"></span><br><span class="line"><span class="comment">// keyBy two connected streams keyby算子操作ConnectStream </span></span><br><span class="line">ConnectedStreams&lt;Tuple2&lt;Int, Long&gt;, Tuple2&lt;Integer, String&gt;&gt; keyedConnect1 = one</span><br><span class="line">  .connect(two)</span><br><span class="line">  .keyBy(<span class="number">0</span>, <span class="number">0</span>); <span class="comment">// key both input streams on first attribute</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// alternative: connect two keyed streams connect 连接 两条keystream</span></span><br><span class="line">ConnectedStreams&lt;Tuple2&lt;Integer, Long&gt;, Tuple2&lt;Integer, String&gt;&gt; keyedConnect2 = one</span><br><span class="line">  .keyBy(<span class="number">0</span>)</span><br><span class="line">  .connect(two.keyBy(<span class="number">0</span>));</span><br></pre></td></tr></table></figure>
+<p>无论使用keyBy()算子操作ConnectedStreams还是使用connect()算子连接两条KeyedStreams，<strong>connect()算子会将两条流的含有相同Key的所有事件都发送到相同的算子实例。两条流的key必须是一样的类型和值</strong>，就像SQL中的JOIN。在connected和keyed stream上面执行的算子有访问keyed state的权限。</p>
+</li>
+<li><p><strong>broadcast</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">DataStream&lt;Tuple2&lt;Integer, Long&gt;&gt; one = ...</span><br><span class="line">DataStream&lt;Tuple2&lt;Int, String&gt;&gt; two = ...</span><br><span class="line"></span><br><span class="line"><span class="comment">// connect streams with broadcast</span></span><br><span class="line">ConnectedStreams&lt;Tuple2&lt;Int, Long&gt;, Tuple2&lt;Int, String&gt;&gt; keyedConnect = first</span><br><span class="line">  <span class="comment">// broadcast second input stream</span></span><br><span class="line">  .connect(second.broadcast());</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><strong>一条被广播过的流中的所有元素将会被复制然后发送到下游算子的所有并行实例中去</strong>。<strong>未被广播过的流仅仅向前发送。</strong>所以两条流的元素显然会被连接处理。</p>
+<h2 id="2-4-分布式转换算子"><a href="#2-4-分布式转换算子" class="headerlink" title="2.4 分布式转换算子"></a>2.4 分布式转换算子</h2><p>分区操作对应于我们之前讲过的“数据交换策略”这一节。这些操作定义了事件如何分配到不同的任务中去。当我们使用DataStream API来编写程序时，系统将自动的选择数据分区策略，然后根据操作符的语义和设置的并行度将数据路由到正确的地方去。有些时候，我们需要在应用程序的层面控制分区策略，或者自定义分区策略。例如，如果我们知道会发生数据倾斜，那么我们想要针对数据流做负载均衡，将数据流平均发送到接下来的操作符中去。又或者，应用程序的业务逻辑可能需要一个算子所有的并行任务都需要接收同样的数据。再或者，我们需要自定义分区策略的时候。在这一小节，我们将展示DataStream的一些方法，可以使我们来控制或者自定义数据分区策略。<br><strong>keyBy()方法不同于分布式转换算子。所有的分布式转换算子将产生DataStream数据类型。而keyBy()产生的类型是KeyedStream，它拥有自己的keyed state。</strong></p>
+<h3 id="2-4-1-Random"><a href="#2-4-1-Random" class="headerlink" title="2.4.1 Random"></a>2.4.1 Random</h3><p>随机数据交换由<code>DataStream.shuffle()</code>方法实现。shuffle方法将数据随机的分配到下游算子的并行任务中去。</p>
+<h3 id="2-4-2-Round-Robin"><a href="#2-4-2-Round-Robin" class="headerlink" title="2.4.2 Round-Robin"></a>2.4.2 Round-Robin</h3><p><code>rebalance()</code>方法使用<code>Round-Robin</code>负载均衡算法将输入流平均分配到随后的并行运行的任务中去。下图为<code>round-robin</code>分布式转换算子的示意图。</p>
+<h3 id="2-4-3-Rescale"><a href="#2-4-3-Rescale" class="headerlink" title="2.4.3 Rescale"></a>2.4.3 Rescale</h3><p><code>rescale()</code>方法使用的也是<code>round-robin</code>算法，但只会将数据发送到接下来的并行运行的任务中的一部分任务中。本质上，当发送者任务数量和接收者任务数量不一样时，rescale分区策略提供了一种轻量级的负载均衡策略。如果接收者任务的数量是发送者任务的数量的倍数时，rescale操作将会效率更高。<br><code>rebalance()</code>和<code>rescale()</code>的根本区别在于任务之间连接的机制不同。 <code>rebalance()</code>将会针对所有发送者任务和所有接收者任务之间建立通信通道，而<code>rescale()</code>仅仅针对每一个任务和下游算子的一部分子并行任务之间建立通信通道。rescale的示意图如下。<br><img src="https://cdn.nlark.com/yuque/0/2020/png/1792867/1609076902383-c5355879-b6e9-49bd-becf-6ffbdefde447.png#align=left&display=inline&height=731&margin=%5Bobject%20Object%5D&name=image.png&originHeight=731&originWidth=980&size=205246&status=done&style=none&width=980" alt="image.png"></p>
+<h3 id="2-4-4-broadcast"><a href="#2-4-4-broadcast" class="headerlink" title="2.4.4 broadcast"></a>2.4.4 broadcast</h3><p><code>broadcast()</code>方法将输入流的所有数据复制并发送到下游算子的所有并行任务中去。</p>
+<h3 id="2-4-5-Global"><a href="#2-4-5-Global" class="headerlink" title="2.4.5 Global"></a>2.4.5 Global</h3><p><code>global()</code>方法将所有的输入流数据都发送到下游算子的第一个并行任务中去。这个操作需要很谨慎，因为将所有数据发送到同一个task，将会对应用程序造成很大的压力。</p>
+<h3 id="2-4-6-Custom"><a href="#2-4-6-Custom" class="headerlink" title="2.4.6 Custom"></a>2.4.6 Custom</h3><p>当Flink提供的分区策略都不适用时，我们可以使用<code>partitionCustom()</code>方法来自定义分区策略。这个方法接收一个<code>Partitioner</code>对象，这个对象需要实现分区逻辑以及定义针对流的哪一个字段或者key来进行分区。</p>
+<h1 id="三-示例"><a href="#三-示例" class="headerlink" title="三. 示例"></a>三. 示例</h1><p><strong>警告类：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Alert</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String message;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">long</span> timestamp;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Alert</span><span class="params">()</span> </span>&#123; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Alert</span><span class="params">(String message, <span class="keyword">long</span> timestamp)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.message = message;</span><br><span class="line">        <span class="keyword">this</span>.timestamp = timestamp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;(&quot;</span> + message + <span class="string">&quot;, &quot;</span> + timestamp + <span class="string">&quot;)&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>烟雾传感器读数类：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">enum</span> <span class="title">SmokeLevel</span> </span>&#123;</span><br><span class="line">    LOW,</span><br><span class="line">    HIGH</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>产生烟雾传感器读数的自定义数据源：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SmokeLevelSource</span> <span class="keyword">implements</span> <span class="title">SourceFunction</span>&lt;<span class="title">SmokeLevel</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> running = <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">(SourceContext&lt;SmokeLevel&gt; srcCtx)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">        Random rand = <span class="keyword">new</span> Random();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (running) &#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (rand.nextGaussian() &gt; <span class="number">0.8</span>) &#123;</span><br><span class="line">                srcCtx.collect(SmokeLevel.HIGH);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                srcCtx.collect(SmokeLevel.LOW);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cancel</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.running = <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MultiStreamTransformations</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();</span><br><span class="line"></span><br><span class="line">        DataStream&lt;SensorReading&gt; tempReadings = env</span><br><span class="line">                .addSource(<span class="keyword">new</span> SensorSource());</span><br><span class="line"></span><br><span class="line">        DataStream&lt;SmokeLevel&gt; smokeReadings = env</span><br><span class="line">                .addSource(<span class="keyword">new</span> SmokeLevelSource())</span><br><span class="line">                .setParallelism(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        KeyedStream&lt;SensorReading, String&gt; keyedTempReadings = tempReadings</span><br><span class="line">                .keyBy(r -&gt; r.id);</span><br><span class="line"></span><br><span class="line">        DataStream&lt;Alert&gt; alerts = keyedTempReadings</span><br><span class="line">                .connect(smokeReadings.broadcast())</span><br><span class="line">                .flatMap(<span class="keyword">new</span> RaiseAlertFlatMap());</span><br><span class="line"></span><br><span class="line">        alerts.print();</span><br><span class="line"></span><br><span class="line">        env.execute(<span class="string">&quot;Multi-Stream Transformations Example&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">RaiseAlertFlatMap</span> <span class="keyword">implements</span> <span class="title">CoFlatMapFunction</span>&lt;<span class="title">SensorReading</span>, <span class="title">SmokeLevel</span>, <span class="title">Alert</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> SmokeLevel smokeLevel = SmokeLevel.LOW;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">flatMap1</span><span class="params">(SensorReading tempReading, Collector&lt;Alert&gt; out)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">            <span class="comment">// high chance of fire =&gt; true</span></span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">this</span>.smokeLevel == SmokeLevel.HIGH &amp;&amp; tempReading.temperature &gt; <span class="number">100</span>) &#123;</span><br><span class="line">                out.collect(<span class="keyword">new</span> Alert(<span class="string">&quot;Risk of fire! &quot;</span> + tempReading, tempReading.timestamp));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">flatMap2</span><span class="params">(SmokeLevel smokeLevel, Collector&lt;Alert&gt; out)</span> </span>&#123;</span><br><span class="line">            <span class="comment">// update smoke level</span></span><br><span class="line">            <span class="keyword">this</span>.smokeLevel = smokeLevel;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Liruijia
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/2021/01/17/Flink-DataStream%20API%20%E5%AD%A6%E4%B9%A0/" title="Flink-DataStream API 学习">http://example.com/2021/01/17/Flink-DataStream API 学习/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>欢迎关注我的其它发布渠道</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+        <a target="_blank" class="social-link" href="/atom.xml">
+          <span class="icon">
+            <i class="fa fa-rss"></i>
+          </span>
+
+          <span class="label">RSS</span>
+        </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Flink/" rel="tag"># Flink</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/01/17/Flume%E6%97%A5%E5%BF%97%E9%87%87%E9%9B%86/" rel="prev" title="Flume日志采集">
+                  <i class="fa fa-chevron-left"></i> Flume日志采集
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/01/17/datax%E4%BB%8B%E7%BB%8D/" rel="next" title="Datax数据同步">
+                  Datax数据同步 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Liruijia</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">33k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">30 分钟</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//unpkg.com/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="//unpkg.com/@next-theme/pjax@0.4.0/pjax.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script><script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '.page-configurations',
+    '.main-inner',
+    '.post-toc-wrap',
+    '.languages',
+    '.pjax'
+  ],
+  analytics: false,
+  cacheBust: false,
+  scrollRestoration: false,
+  scrollTo: !CONFIG.bookmark.enable
+});
+
+document.addEventListener('pjax:success', () => {
+  pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  const hasTOC = document.querySelector('.post-toc');
+  document.querySelector('.sidebar-inner').classList.toggle('sidebar-nav-active', hasTOC);
+  document.querySelector(hasTOC ? '.sidebar-nav-toc' : '.sidebar-nav-overview').click();
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+  
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+    <div class="pjax">
+
+
+    </div>
+</body>
+</html>
