@@ -30,13 +30,11 @@
 <meta property="og:site_name" content="Liruijia&#39;s Blog">
 <meta property="og:description" content="Flink 提供了丰富的客户端操作来提交任务和与任务进行交互,利用flink进行实时统计之前先对其接口开发流程进行了解，Flink提供了Java&#x2F;sql接口，下面主要就Java-api进行介绍。有不太正确的地方忘纠正！！！">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/1792867/1608362652106-87285486-8add-43df-a2ac-80c2085e5037.png#align=left&display=inline&height=405&margin=%5Bobject%20Object%5D&originHeight=405&originWidth=720&size=0&status=done&style=none&width=720">
 <meta property="article:published_time" content="2021-01-17T13:11:15.000Z">
-<meta property="article:modified_time" content="2021-01-22T15:13:49.485Z">
+<meta property="article:modified_time" content="2021-01-23T06:18:48.207Z">
 <meta property="article:author" content="Liruijia">
 <meta property="article:tag" content="Flink">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2020/png/1792867/1608362652106-87285486-8add-43df-a2ac-80c2085e5037.png#align=left&display=inline&height=405&margin=%5Bobject%20Object%5D&originHeight=405&originWidth=720&size=0&status=done&style=none&width=720">
 
 
 <link rel="canonical" href="http://example.com/2021/01/17/Flink_DataStream%20API%E6%8E%A5%E5%8F%A3%E5%BC%80%E5%8F%91%E8%A7%84%E8%8C%83/">
@@ -300,7 +298,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2021-01-22 23:13:49" itemprop="dateModified" datetime="2021-01-22T23:13:49+08:00">2021-01-22</time>
+        <time title="修改时间：2021-01-23 14:18:48" itemprop="dateModified" datetime="2021-01-23T14:18:48+08:00">2021-01-23</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -360,12 +358,18 @@
 <p>在 Word Count 例子中，我们首先将每一条记录（即文件中的一行）分隔为单词，这是通过 FlatMap 操作来实现的。调用 FlatMap 将会在底层的 DAG 图中添加一个 FlatMap 算子。然后，我们得到了一个记录是单词的流。我们将流中的单词进行分组（keyBy），然后累积计算每一个单词的数据（sum(1)）。计算出的单词的数据组成了一个新的流，我们将它写入到输出文件中。<br>Flink调用算子机会在DAG图中建立添加相应的算子节点。<br>前面我们调用的所有方法，都不是在实际处理数据，而是在构通表达计算逻辑的 DAG 图。只有当我们将整个图构建完成并显式的调用 Execute 方法后，框架才会把计算图提供到集群中，接入数据并执行实际的逻辑。<br>Flink 累计计算， Flink 在进行处理的时候，每一次按照设定的时间窗口进行相应的算子，当新的数据进来之后，在原来的基础上进行相应的计算，达到累计的效果。window主要达到了切分的效果，通过过 Window 操作对流可以按时间或者个数进行一些切分，从而将流切分成一个个较小的分组。具体的切分逻辑可以由用户进行选择。当一个分组中所有记录都到达后，用户可以拿到该分组中的所有记录，从而可以进行一些遍历或者累加操作。这样，对每个分组的处理都可以得到一组输出数据，这些输出数据形成了一个新的基本流。</p>
 <h1 id="DataStream操作分类"><a href="#DataStream操作分类" class="headerlink" title="DataStream操作分类"></a>DataStream操作分类</h1><p>Flink DataStream API 的核心，就是代表流数据的 DataStream 对象。整个计算逻辑图的构建就是围绕调用 DataStream 对象上的不同操作产生新的 DataStream 对象展开的。DataStream 上的操作可以分为四类 ： </p>
 <ul>
-<li>对于单条记录的操作，比如筛除掉不符合要求的记录（Filter 操作），或者将每条记录都做一个转换（Map 操作）</li>
-<li>对多条记录的操作。比如说统计一个小时内的订单总成交量，就需要将一个小时内的所有订单记录的成交量加到一起。通过 Window 将需要的记录关联到一起进行处</li>
-<li>对多个流进行操作并转换为单个流，例如，多个流可以通过 Union、Join 或 Connect 等操作合到一起。这些操作合并的逻辑不同，但是它们最终都会产生了一个新的统一的流，从而可以进行一些跨流的操作。</li>
-<li>DataStream 还支持与合并对称的操作，即把一个流按一定规则拆分为多个流（Split 操作），每个流是之前流的一个子集，这样我们就可以对不同的流作不同的处理</li>
+<li><p>对于单条记录的操作，比如筛除掉不符合要求的记录（Filter 操作），或者将每条记录都做一个转换（Map 操作）</p>
+</li>
+<li><p>对多条记录的操作。比如说统计一个小时内的订单总成交量，就需要将一个小时内的所有订单记录的成交量加到一起。通过 Window 将需要的记录关联到一起进行处</p>
+</li>
+<li><p>对多个流进行操作并转换为单个流，例如，多个流可以通过 Union、Join 或 Connect 等操作合到一起。这些操作合并的逻辑不同，但是它们最终都会产生了一个新的统一的流，从而可以进行一些跨流的操作。</p>
+</li>
+<li><p>DataStream 还支持与合并对称的操作，即把一个流按一定规则拆分为多个流（Split 操作），每个流是之前流的一个子集，这样我们就可以对不同的流作不同的处理</p>
+
+
+
+</li>
 </ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1792867/1608362652106-87285486-8add-43df-a2ac-80c2085e5037.png#align=left&display=inline&height=405&margin=%5Bobject%20Object%5D&originHeight=405&originWidth=720&size=0&status=done&style=none&width=720"></p>
 <p>对于普通的 DataStream，我们必须使用 allWindow 操作，它代表对整个流进行统一的 Window 处理，因此是不能使用多个算子实例进行同时计算的。针对这一问题，就需要我们首先使用 KeyBy 方法对记录按 Key 进行分组，然后才可以并行的对不同 Key 对应的记录进行单独的 Window 操作。KeyBy 操作是我们日常编程中最重要的操作之一。</p>
 <h1 id="DataStream的分组方式"><a href="#DataStream的分组方式" class="headerlink" title="DataStream的分组方式"></a>DataStream的分组方式</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">keyby —— 为了能够在多个并发实例上并行的对数据进行处理，我们需要通过 KeyBy 将数据进行分组 ，KeyBy 是在水平分向对流进行切分。使用 KeyBy 进行数据切分之后，后续算子的每一个实例可以只处理特定 Key 集合对应的数据</span><br><span class="line"></span><br><span class="line">Global: 上游算子将所有记录发送给下游算子的第一个实例。</span><br><span class="line"></span><br><span class="line">Broadcast: 上游算子将每一条记录发送给下游算子的所有实例。</span><br><span class="line"></span><br><span class="line">Forward：只适用于上游算子实例数与下游算子相同时，每个上游算子实例将记录发送给下游算子对应的实例。</span><br><span class="line"></span><br><span class="line">Shuffle：上游算子对每条记录随机选择一个下游算子进行发送。</span><br><span class="line"></span><br><span class="line">Rebalance：上游算子通过轮询的方式发送数据。</span><br><span class="line"></span><br><span class="line">Rescale：当上游和下游算子的实例数为 n 或 m 时，如果 n &lt; m，则每个上游实例向ceil(m/n)或floor(m/n)个下游实例轮询发送数据；如果 n &gt; m，则 floor(n/m) 或 ceil(n/m) 个上游实例向下游实例轮询发送数据。</span><br><span class="line"></span><br><span class="line">PartitionCustomer：当上述内置分配方式不满足需求时，用户还可以选择自定义分组方式。</span><br></pre></td></tr></table></figure>
 <h1 id="DataStream的类型"><a href="#DataStream的类型" class="headerlink" title="DataStream的类型"></a>DataStream的类型</h1><p>Flink DataStream 对像都是强类型的，每一个 DataStream 对象都需要指定元素的类型，Flink 自己底层的序列化机制正是依赖于这些信息对序列化等进行优化。具体来说，在 Flink 底层，它是使用 TypeInformation 对象对类型进行描述的，TypeInformation 对象定义了一组类型相关的信息供序列化框架使用。</p>
