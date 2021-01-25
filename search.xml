@@ -1,46 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Linux下安装Python和Anaconda遇到的坑</title>
-    <url>/2021/01/18/Linux%E4%B8%8B%E5%AE%89%E8%A3%85python%E5%92%8Canaconda%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/</url>
-    <content><![CDATA[<p>今天本来不打算写文，但是今天发生了一件娱乐圈今天大事:smile:,虽然和我没有什么关系，但是还说想记录一下自己的感受，zs的事情真的跌破三观。</p>
-<p>下面还是开始本文吧，这文章主要记录一下，在Linux环境下安装Python和Anaconda遇到的坑！对于Python和Anaconda到底如何安装下面会给出一些连接来供大家参考。</p>
-<a id="more"></a>
-
-<h1 id="安装教程"><a href="#安装教程" class="headerlink" title="安装教程"></a>安装教程</h1><p><strong>安装Python3:</strong> </p>
-<p>​        <a href="https://www.cnblogs.com/Jimc/p/10218387.html">Linux下安装python3</a>  操作系统Ubuntu</p>
-<p>​        <a href="https://www.cnblogs.com/kimyeee/p/7250560.html">Linux下安装Python3.6和第三方库</a> 安装环境Linux</p>
-<p><strong>安装Anaconda:</strong></p>
-<p>​        <a href="https://blog.csdn.net/Ni_hao2017/article/details/103346694">Linux安装anaconda与jupyter notebook配置</a> 提到了Anaconda 和 jupyter notebook的配置</p>
-<h1 id="踩到的坑"><a href="#踩到的坑" class="headerlink" title="踩到的坑"></a>踩到的坑</h1><h2 id="问题1-ctype问题"><a href="#问题1-ctype问题" class="headerlink" title="问题1 ctype问题"></a>问题1 ctype问题</h2><p>python 编译过程（执行make &amp;&amp; make install）中， ctype报错问题</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 在python安装目录下执行：</span></span><br><span class="line">yum -y install zlib* </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 执行下面命令，此处换成你自己的python3安装路径 ，并<span class="built_in">cd</span>到Modules/Setup目录下</span> </span><br><span class="line">vim /usr/local/python3/Python-3.6.8/Modules/Setup  </span><br><span class="line"><span class="meta">#</span><span class="bash"> 进去该文件之后找到下面这一句 去掉注释 退出保存 (esc -&gt; :wq)</span></span><br><span class="line"><span class="meta">#</span><span class="bash">zlib zlibmodule.c -I$(prefix)/include -L$(exec_prefix)/lib -lz</span>  </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="built_in">cd</span>到python3的安装路径下 重新编译</span></span><br><span class="line">make &amp; make install </span><br></pre></td></tr></table></figure>
-<h2 id="问题2-版本更改"><a href="#问题2-版本更改" class="headerlink" title="问题2 版本更改"></a>问题2 版本更改</h2><p>安装完毕之后，设置python3为默认的版本</p>
-<p>Linux系统下一般都会自带python2的版本，但是一般情况下很少用到这个版本，但是不能删除，因为有的应用程序执行代码还是需要到这个版本的python（比如，执行datax任务的时候，datax.py文件是用python2编译的）。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 删除python旧链 系统配置文件路径（不变）</span></span><br><span class="line">rm -rf /usr/bin/python </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">创建python3 软链</span></span><br><span class="line">ln -s /usr/local/python3/bin/python3  /usr/bin/python  # 前面的路径是你python3的安装路径，cd到bin/python3路径下</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">软链检查路径</span></span><br><span class="line">whereis python </span><br></pre></td></tr></table></figure>
-<p>完成上述过程之后，在任意路径下执行<code>python</code>，即可进入python空间，通过可以看到python的版本，出现如下所图说明安装成功。下图中框出来两个部分，分别表示python3和anaconda3安装成功！</p>
-<p><img src="https://img2020.cnblogs.com/blog/1620989/202101/1620989-20210122173802791-1338678861.png">  </p>
-<h2 id="问题3-激活虚拟环境"><a href="#问题3-激活虚拟环境" class="headerlink" title="问题3 激活虚拟环境"></a>问题3 激活虚拟环境</h2><p>anaconda安装虚拟环境之后，激活不了虚拟环境</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">执行如下命令  激活activate环境 执行完此命令之后，会出现上图中 <span class="string">&quot;(base)&quot;</span> 表示anaconda的基本环境</span></span><br><span class="line">source activate</span><br><span class="line"></span><br><span class="line">conda deactivate # 退出base环境</span><br><span class="line"></span><br><span class="line">conda activate 你的环境名  # 激活你自己建的虚拟环境</span><br></pre></td></tr></table></figure>
-<h2 id="问题4-配置阿里源"><a href="#问题4-配置阿里源" class="headerlink" title="问题4 配置阿里源"></a>问题4 配置阿里源</h2><p>配置阿里源的主要原因是阿里源是真的快！！！</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> pip配置</span></span><br><span class="line">pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/ </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">conda配置</span></span><br><span class="line">conda config --add channels http://mirrors.aliyun.com/pypi/simple/</span><br><span class="line">conda config --set show_channel_urls yes </span><br></pre></td></tr></table></figure>
-<h2 id="问题5-jupyter-notebook-root"><a href="#问题5-jupyter-notebook-root" class="headerlink" title="问题5 jupyter notebook - root"></a>问题5 jupyter notebook - root</h2><p>打开jupyter notebook，出现root问题</p>
-<p><code>Running as **root** is not recommended. Use –allow-root to bypass</code></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">执行以下命令</span></span><br><span class="line">jupyter notebook --generate-config</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">在生成的 jupyter_notebook_config.py 修改配置</span></span><br><span class="line">vim /root/.jupyter/jupyter_notebook_config.py</span><br><span class="line">将c.NotebookApp.allow_root = False前边的  &#x27;#&#x27;去掉，在把False修改为True</span><br></pre></td></tr></table></figure>
-<h2 id="问题6-配置jupyter"><a href="#问题6-配置jupyter" class="headerlink" title="问题6 配置jupyter"></a>问题6 配置jupyter</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 任意路径下输入 ，此命令会在 /root/.jupyter 路径下生成一个py文件</span></span><br><span class="line">jupyter notebook --generate-config</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 进入python编译环境</span> </span><br><span class="line">python</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 进入编辑环境之后执行：</span></span><br><span class="line">from notebook.auth import passwd  </span><br><span class="line">passwd()  # 输入你自己的命令，并保存最后的hash结果 ，如下面展示的一样，是哈希之后的密码&quot;argon2:$argon2id$v=19$m=10240,t=10,p=8$g9crgnSC05ADyr3kR3qSZQ$PaU8QhZOEbZrAqQrgHHyeQ&quot;</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 退出编译环境</span></span><br><span class="line">exit()</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 编译 /root/.jupyter/jupyter_notebook_config.py</span> </span><br><span class="line">vim /root/.jupyter/jupyter_notebook_config.py</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 进入之后，找到如下行， 或者 直接复制进行 修改参数即可</span></span><br><span class="line">c.NotebookApp.ip=&#x27;你自己的服务器IP&#x27;       # 也可以设置成&#x27;*&#x27;表示所有ip皆可访问，但是还是建议写成自己的服务器IP,这样好调用</span><br><span class="line">c.NotebookApp.password = &#x27;sha:ce...     # 上面复制hash之后的密码 </span><br><span class="line">c.NotebookApp.open_browser = False       # 禁止自动打开浏览器  </span><br><span class="line">c.NotebookApp.port =8888                 # 端口 不一定要写成8888 ， 你可以自己设定一个端口</span><br><span class="line">c.NotebookApp.notebook_dir = &#x27;/home/xxx&#x27; #在进入到jupyter环境中的公开目录 </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 配置完上面信息之后 保存退出</span></span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>踩坑日记</category>
-        <category>python系</category>
-        <category>安装日记</category>
-        <category>python系</category>
-      </categories>
-      <tags>
-        <tag>Linux</tag>
-        <tag>Python</tag>
-        <tag>Anaconda</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Flink-DataStream API接口开发规范</title>
     <url>/2021/01/17/Flink_DataStream%20API%E6%8E%A5%E5%8F%A3%E5%BC%80%E5%8F%91%E8%A7%84%E8%8C%83/</url>
     <content><![CDATA[<p>Flink 提供了丰富的客户端操作来提交任务和与任务进行交互,利用flink进行实时统计之前先对其接口开发流程进行了解，Flink提供了Java/sql接口，下面主要就Java-api进行介绍。有不太正确的地方忘纠正！！！</p>
@@ -83,26 +43,43 @@
       </tags>
   </entry>
   <entry>
-    <title>Datax数据同步</title>
-    <url>/2021/01/17/datax%E4%BB%8B%E7%BB%8D/</url>
-    <content><![CDATA[<p>datax 数据同步离线工具，将不同数据源的同步抽象为从源头数据源读取数据的Reader插件，以及向目标端写入数据的Writer插件，理论上DataX框架可以支持任意数据源类型的数据同步工作。同时DataX插件体系作为一套生态系统, 每接入一套新数据源该新加入的数据源即可实现和现有的数据源互通。</p>
+    <title>Linux下安装Python和Anaconda遇到的坑</title>
+    <url>/2021/01/18/Linux%E4%B8%8B%E5%AE%89%E8%A3%85python%E5%92%8Canaconda%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/</url>
+    <content><![CDATA[<p>今天本来不打算写文，但是今天发生了一件娱乐圈今天大事:smile:,虽然和我没有什么关系，但是还说想记录一下自己的感受，zs的事情真的跌破三观。</p>
+<p>下面还是开始本文吧，这文章主要记录一下，在Linux环境下安装Python和Anaconda遇到的坑！对于Python和Anaconda到底如何安装下面会给出一些连接来供大家参考。</p>
 <a id="more"></a>
 
-<h1 id="Datax介绍"><a href="#Datax介绍" class="headerlink" title="Datax介绍"></a>Datax介绍</h1><p>datax 数据同步离线工具，将不同数据源的同步抽象为从源头数据源读取数据的Reader插件，以及向目标端写入数据的Writer插件，理论上DataX框架可以支持任意数据源类型的数据同步工作。同时DataX插件体系作为一套生态系统, 每接入一套新数据源该新加入的数据源即可实现和现有的数据源互通。</p>
-<p>​    安装部署-<a href="http://datax-opensource.oss-cn-hangzhou.aliyuncs.com/datax.tar.gz">安装路径</a>,只需要进行相应的安装解压到相应的路径即可。每次执行任务则是将使用<code>/datax/bin/data.py</code>文件来去执行相应的任务即可。</p>
-<p>​    DataX执行同步任务得时候，将数据源读取和写入抽象成为Reader/Writer插件，纳入到整个同步框架中。</p>
-<ul>
-<li> Reader：Reader为数据采集模块，负责采集数据源的数据，将数据发送给Framework。</li>
-<li>Writer：Writer为数据写入模块，负责不断向Framework取数据，并将数据写入到目的端。</li>
-<li>Framework：Framework用于连接reader和writer，作为两者的数据传输通道，并处理缓冲，流控，并发，数据转换等核心技术问题。</li>
-</ul>
+<h1 id="安装教程"><a href="#安装教程" class="headerlink" title="安装教程"></a>安装教程</h1><p><strong>安装Python3:</strong> </p>
+<p>​        <a href="https://www.cnblogs.com/Jimc/p/10218387.html">Linux下安装python3</a>  操作系统Ubuntu</p>
+<p>​        <a href="https://www.cnblogs.com/kimyeee/p/7250560.html">Linux下安装Python3.6和第三方库</a> 安装环境Linux</p>
+<p><strong>安装Anaconda:</strong></p>
+<p>​        <a href="https://blog.csdn.net/Ni_hao2017/article/details/103346694">Linux安装anaconda与jupyter notebook配置</a> 提到了Anaconda 和 jupyter notebook的配置</p>
+<h1 id="踩到的坑"><a href="#踩到的坑" class="headerlink" title="踩到的坑"></a>踩到的坑</h1><h2 id="问题1-ctype问题"><a href="#问题1-ctype问题" class="headerlink" title="问题1 ctype问题"></a>问题1 ctype问题</h2><p>python 编译过程（执行make &amp;&amp; make install）中， ctype报错问题</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 在python安装目录下执行：</span></span><br><span class="line">yum -y install zlib* </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 执行下面命令，此处换成你自己的python3安装路径 ，并<span class="built_in">cd</span>到Modules/Setup目录下</span> </span><br><span class="line">vim /usr/local/python3/Python-3.6.8/Modules/Setup  </span><br><span class="line"><span class="meta">#</span><span class="bash"> 进去该文件之后找到下面这一句 去掉注释 退出保存 (esc -&gt; :wq)</span></span><br><span class="line"><span class="meta">#</span><span class="bash">zlib zlibmodule.c -I$(prefix)/include -L$(exec_prefix)/lib -lz</span>  </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="built_in">cd</span>到python3的安装路径下 重新编译</span></span><br><span class="line">make &amp; make install </span><br></pre></td></tr></table></figure>
+<h2 id="问题2-版本更改"><a href="#问题2-版本更改" class="headerlink" title="问题2 版本更改"></a>问题2 版本更改</h2><p>安装完毕之后，设置python3为默认的版本</p>
+<p>Linux系统下一般都会自带python2的版本，但是一般情况下很少用到这个版本，但是不能删除，因为有的应用程序执行代码还是需要到这个版本的python（比如，执行datax任务的时候，datax.py文件是用python2编译的）。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 删除python旧链 系统配置文件路径（不变）</span></span><br><span class="line">rm -rf /usr/bin/python </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">创建python3 软链</span></span><br><span class="line">ln -s /usr/local/python3/bin/python3  /usr/bin/python  # 前面的路径是你python3的安装路径，cd到bin/python3路径下</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">软链检查路径</span></span><br><span class="line">whereis python </span><br></pre></td></tr></table></figure>
+<p>完成上述过程之后，在任意路径下执行<code>python</code>，即可进入python空间，通过可以看到python的版本，出现如下所图说明安装成功。下图中框出来两个部分，分别表示python3和anaconda3安装成功！</p>
+<p><img src="https://img2020.cnblogs.com/blog/1620989/202101/1620989-20210122173802791-1338678861.png">  </p>
+<h2 id="问题3-激活虚拟环境"><a href="#问题3-激活虚拟环境" class="headerlink" title="问题3 激活虚拟环境"></a>问题3 激活虚拟环境</h2><p>anaconda安装虚拟环境之后，激活不了虚拟环境</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">执行如下命令  激活activate环境 执行完此命令之后，会出现上图中 <span class="string">&quot;(base)&quot;</span> 表示anaconda的基本环境</span></span><br><span class="line">source activate</span><br><span class="line"></span><br><span class="line">conda deactivate # 退出base环境</span><br><span class="line"></span><br><span class="line">conda activate 你的环境名  # 激活你自己建的虚拟环境</span><br></pre></td></tr></table></figure>
+<h2 id="问题4-配置阿里源"><a href="#问题4-配置阿里源" class="headerlink" title="问题4 配置阿里源"></a>问题4 配置阿里源</h2><p>配置阿里源的主要原因是阿里源是真的快！！！</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> pip配置</span></span><br><span class="line">pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/ </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">conda配置</span></span><br><span class="line">conda config --add channels http://mirrors.aliyun.com/pypi/simple/</span><br><span class="line">conda config --set show_channel_urls yes </span><br></pre></td></tr></table></figure>
+<h2 id="问题5-jupyter-notebook-root"><a href="#问题5-jupyter-notebook-root" class="headerlink" title="问题5 jupyter notebook - root"></a>问题5 jupyter notebook - root</h2><p>打开jupyter notebook，出现root问题</p>
+<p><code>Running as **root** is not recommended. Use –allow-root to bypass</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">执行以下命令</span></span><br><span class="line">jupyter notebook --generate-config</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">在生成的 jupyter_notebook_config.py 修改配置</span></span><br><span class="line">vim /root/.jupyter/jupyter_notebook_config.py</span><br><span class="line">将c.NotebookApp.allow_root = False前边的  &#x27;#&#x27;去掉，在把False修改为True</span><br></pre></td></tr></table></figure>
+<h2 id="问题6-配置jupyter"><a href="#问题6-配置jupyter" class="headerlink" title="问题6 配置jupyter"></a>问题6 配置jupyter</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 任意路径下输入 ，此命令会在 /root/.jupyter 路径下生成一个py文件</span></span><br><span class="line">jupyter notebook --generate-config</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 进入python编译环境</span> </span><br><span class="line">python</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 进入编辑环境之后执行：</span></span><br><span class="line">from notebook.auth import passwd  </span><br><span class="line">passwd()  # 输入你自己的命令，并保存最后的hash结果 ，如下面展示的一样，是哈希之后的密码&quot;argon2:$argon2id$v=19$m=10240,t=10,p=8$g9crgnSC05ADyr3kR3qSZQ$PaU8QhZOEbZrAqQrgHHyeQ&quot;</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 退出编译环境</span></span><br><span class="line">exit()</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 编译 /root/.jupyter/jupyter_notebook_config.py</span> </span><br><span class="line">vim /root/.jupyter/jupyter_notebook_config.py</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 进入之后，找到如下行， 或者 直接复制进行 修改参数即可</span></span><br><span class="line">c.NotebookApp.ip=&#x27;你自己的服务器IP&#x27;       # 也可以设置成&#x27;*&#x27;表示所有ip皆可访问，但是还是建议写成自己的服务器IP,这样好调用</span><br><span class="line">c.NotebookApp.password = &#x27;sha:ce...     # 上面复制hash之后的密码 </span><br><span class="line">c.NotebookApp.open_browser = False       # 禁止自动打开浏览器  </span><br><span class="line">c.NotebookApp.port =8888                 # 端口 不一定要写成8888 ， 你可以自己设定一个端口</span><br><span class="line">c.NotebookApp.notebook_dir = &#x27;/home/xxx&#x27; #在进入到jupyter环境中的公开目录 </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 配置完上面信息之后 保存退出</span></span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>大数据学习</category>
+        <category>踩坑日记</category>
+        <category>python系</category>
+        <category>安装日记</category>
+        <category>python系</category>
       </categories>
       <tags>
-        <tag>数据同步</tag>
-        <tag>Datax</tag>
+        <tag>Linux</tag>
+        <tag>Python</tag>
+        <tag>Anaconda</tag>
       </tags>
   </entry>
   <entry>
@@ -144,6 +121,29 @@
       <tags>
         <tag>全量</tag>
         <tag>增量</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Datax数据同步</title>
+    <url>/2021/01/17/datax%E4%BB%8B%E7%BB%8D/</url>
+    <content><![CDATA[<p>datax 数据同步离线工具，将不同数据源的同步抽象为从源头数据源读取数据的Reader插件，以及向目标端写入数据的Writer插件，理论上DataX框架可以支持任意数据源类型的数据同步工作。同时DataX插件体系作为一套生态系统, 每接入一套新数据源该新加入的数据源即可实现和现有的数据源互通。</p>
+<a id="more"></a>
+
+<h1 id="Datax介绍"><a href="#Datax介绍" class="headerlink" title="Datax介绍"></a>Datax介绍</h1><p>datax 数据同步离线工具，将不同数据源的同步抽象为从源头数据源读取数据的Reader插件，以及向目标端写入数据的Writer插件，理论上DataX框架可以支持任意数据源类型的数据同步工作。同时DataX插件体系作为一套生态系统, 每接入一套新数据源该新加入的数据源即可实现和现有的数据源互通。</p>
+<p>​    安装部署-<a href="http://datax-opensource.oss-cn-hangzhou.aliyuncs.com/datax.tar.gz">安装路径</a>,只需要进行相应的安装解压到相应的路径即可。每次执行任务则是将使用<code>/datax/bin/data.py</code>文件来去执行相应的任务即可。</p>
+<p>​    DataX执行同步任务得时候，将数据源读取和写入抽象成为Reader/Writer插件，纳入到整个同步框架中。</p>
+<ul>
+<li> Reader：Reader为数据采集模块，负责采集数据源的数据，将数据发送给Framework。</li>
+<li>Writer：Writer为数据写入模块，负责不断向Framework取数据，并将数据写入到目的端。</li>
+<li>Framework：Framework用于连接reader和writer，作为两者的数据传输通道，并处理缓冲，流控，并发，数据转换等核心技术问题。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>大数据学习</category>
+      </categories>
+      <tags>
+        <tag>数据同步</tag>
+        <tag>Datax</tag>
       </tags>
   </entry>
   <entry>
