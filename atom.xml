@@ -3,11 +3,11 @@
   <title>Liruijia&#39;s Blog</title>
   
   <subtitle>Hello world</subtitle>
-  <link href="http://example.com/atom.xml" rel="self"/>
+  <link href="http://liruijia.github.io/atom.xml" rel="self"/>
   
-  <link href="http://example.com/"/>
-  <updated>2021-01-22T15:13:15.302Z</updated>
-  <id>http://example.com/</id>
+  <link href="http://liruijia.github.io/"/>
+  <updated>2021-01-27T10:06:41.002Z</updated>
+  <id>http://liruijia.github.io/</id>
   
   <author>
     <name>Liruijia</name>
@@ -17,9 +17,34 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>kmeans源码学习 之</title>
+    <link href="http://liruijia.github.io/2021/01/27/kmeans%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0/"/>
+    <id>http://liruijia.github.io/2021/01/27/kmeans%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0/</id>
+    <published>2021-01-27T09:38:39.000Z</published>
+    <updated>2021-01-27T10:06:41.002Z</updated>
+    
+    <content type="html"><![CDATA[<p>为什么要去脑抽去看Kmeans的源码嘞？主要还是自己闲的没事干的时候实现了一下Kmeans的代码，自己在写的时候主要是去实现了Kmeans的伪代码，等写完之后发现还是有必要看看官方的代码，因此也就有了这一篇文章，我觉得这一块内容 我得写好久！！！</p><a id="more"></a><h1 id="Kmeans源码在哪？"><a href="#Kmeans源码在哪？" class="headerlink" title="Kmeans源码在哪？"></a>Kmeans源码在哪？</h1><p>需要明确 被包装在Sklearn中，sklearn中有很多基类：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">BaseEstimator</span><br><span class="line">ClusterMixin</span><br><span class="line">RegressorMixin</span><br><span class="line">ClassifierMixin</span><br><span class="line">TransformerMixin</span><br><span class="line">DensityMixin</span><br><span class="line">OutlierMixin</span><br><span class="line">MultiOutputMixin</span><br><span class="line">_UnstableArchMixin</span><br><span class="line">.......</span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;为什么要去脑抽去看Kmeans的源码嘞？主要还是自己闲的没事干的时候实现了一下Kmeans的代码，自己在写的时候主要是去实现了Kmeans的伪代码，等写完之后发现还是有必要看看官方的代码，因此也就有了这一篇文章，我觉得这一块内容 我得写好久！！！&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="http://liruijia.github.io/categories/python/"/>
+    
+    <category term="机器学习" scheme="http://liruijia.github.io/categories/python/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+    <category term="python" scheme="http://liruijia.github.io/tags/python/"/>
+    
+    <category term="聚类" scheme="http://liruijia.github.io/tags/%E8%81%9A%E7%B1%BB/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Linux下安装Python和Anaconda遇到的坑</title>
-    <link href="http://example.com/2021/01/18/Linux%E4%B8%8B%E5%AE%89%E8%A3%85python%E5%92%8Canaconda%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/"/>
-    <id>http://example.com/2021/01/18/Linux%E4%B8%8B%E5%AE%89%E8%A3%85python%E5%92%8Canaconda%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/</id>
+    <link href="http://liruijia.github.io/2021/01/18/Linux%E4%B8%8B%E5%AE%89%E8%A3%85python%E5%92%8Canaconda%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/"/>
+    <id>http://liruijia.github.io/2021/01/18/Linux%E4%B8%8B%E5%AE%89%E8%A3%85python%E5%92%8Canaconda%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/</id>
     <published>2021-01-18T15:23:46.000Z</published>
     <updated>2021-01-22T15:13:15.302Z</updated>
     
@@ -31,27 +56,27 @@
     
     
     
-    <category term="踩坑日记" scheme="http://example.com/categories/%E8%B8%A9%E5%9D%91%E6%97%A5%E8%AE%B0/"/>
+    <category term="踩坑日记" scheme="http://liruijia.github.io/categories/%E8%B8%A9%E5%9D%91%E6%97%A5%E8%AE%B0/"/>
     
-    <category term="python系" scheme="http://example.com/categories/%E8%B8%A9%E5%9D%91%E6%97%A5%E8%AE%B0/python%E7%B3%BB/"/>
+    <category term="python系" scheme="http://liruijia.github.io/categories/%E8%B8%A9%E5%9D%91%E6%97%A5%E8%AE%B0/python%E7%B3%BB/"/>
     
-    <category term="安装日记" scheme="http://example.com/categories/%E5%AE%89%E8%A3%85%E6%97%A5%E8%AE%B0/"/>
+    <category term="安装日记" scheme="http://liruijia.github.io/categories/%E5%AE%89%E8%A3%85%E6%97%A5%E8%AE%B0/"/>
     
-    <category term="python系" scheme="http://example.com/categories/%E5%AE%89%E8%A3%85%E6%97%A5%E8%AE%B0/python%E7%B3%BB/"/>
+    <category term="python系" scheme="http://liruijia.github.io/categories/%E5%AE%89%E8%A3%85%E6%97%A5%E8%AE%B0/python%E7%B3%BB/"/>
     
     
-    <category term="Linux" scheme="http://example.com/tags/Linux/"/>
+    <category term="Linux" scheme="http://liruijia.github.io/tags/Linux/"/>
     
-    <category term="Python" scheme="http://example.com/tags/Python/"/>
+    <category term="Python" scheme="http://liruijia.github.io/tags/Python/"/>
     
-    <category term="Anaconda" scheme="http://example.com/tags/Anaconda/"/>
+    <category term="Anaconda" scheme="http://liruijia.github.io/tags/Anaconda/"/>
     
   </entry>
   
   <entry>
     <title>Flink-DataStream API接口开发规范</title>
-    <link href="http://example.com/2021/01/17/Flink_DataStream%20API%E6%8E%A5%E5%8F%A3%E5%BC%80%E5%8F%91%E8%A7%84%E8%8C%83/"/>
-    <id>http://example.com/2021/01/17/Flink_DataStream%20API%E6%8E%A5%E5%8F%A3%E5%BC%80%E5%8F%91%E8%A7%84%E8%8C%83/</id>
+    <link href="http://liruijia.github.io/2021/01/17/Flink_DataStream%20API%E6%8E%A5%E5%8F%A3%E5%BC%80%E5%8F%91%E8%A7%84%E8%8C%83/"/>
+    <id>http://liruijia.github.io/2021/01/17/Flink_DataStream%20API%E6%8E%A5%E5%8F%A3%E5%BC%80%E5%8F%91%E8%A7%84%E8%8C%83/</id>
     <published>2021-01-17T13:11:15.000Z</published>
     <updated>2021-01-23T06:26:04.650Z</updated>
     
@@ -62,19 +87,19 @@
     
     
     
-    <category term="大数据学习" scheme="http://example.com/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AD%A6%E4%B9%A0/"/>
+    <category term="大数据学习" scheme="http://liruijia.github.io/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AD%A6%E4%B9%A0/"/>
     
-    <category term="Flink" scheme="http://example.com/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AD%A6%E4%B9%A0/Flink/"/>
+    <category term="Flink" scheme="http://liruijia.github.io/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AD%A6%E4%B9%A0/Flink/"/>
     
     
-    <category term="Flink" scheme="http://example.com/tags/Flink/"/>
+    <category term="Flink" scheme="http://liruijia.github.io/tags/Flink/"/>
     
   </entry>
   
   <entry>
     <title>Datax数据同步</title>
-    <link href="http://example.com/2021/01/17/datax%E4%BB%8B%E7%BB%8D/"/>
-    <id>http://example.com/2021/01/17/datax%E4%BB%8B%E7%BB%8D/</id>
+    <link href="http://liruijia.github.io/2021/01/17/datax%E4%BB%8B%E7%BB%8D/"/>
+    <id>http://liruijia.github.io/2021/01/17/datax%E4%BB%8B%E7%BB%8D/</id>
     <published>2021-01-17T13:11:15.000Z</published>
     <updated>2021-01-22T15:27:04.483Z</updated>
     
@@ -85,19 +110,19 @@
     
     
     
-    <category term="大数据学习" scheme="http://example.com/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AD%A6%E4%B9%A0/"/>
+    <category term="大数据学习" scheme="http://liruijia.github.io/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AD%A6%E4%B9%A0/"/>
     
     
-    <category term="数据同步" scheme="http://example.com/tags/%E6%95%B0%E6%8D%AE%E5%90%8C%E6%AD%A5/"/>
+    <category term="数据同步" scheme="http://liruijia.github.io/tags/%E6%95%B0%E6%8D%AE%E5%90%8C%E6%AD%A5/"/>
     
-    <category term="Datax" scheme="http://example.com/tags/Datax/"/>
+    <category term="Datax" scheme="http://liruijia.github.io/tags/Datax/"/>
     
   </entry>
   
   <entry>
     <title>Flink-DataStream API 学习</title>
-    <link href="http://example.com/2021/01/17/Flink-DataStream%20API%20%E5%AD%A6%E4%B9%A0/"/>
-    <id>http://example.com/2021/01/17/Flink-DataStream%20API%20%E5%AD%A6%E4%B9%A0/</id>
+    <link href="http://liruijia.github.io/2021/01/17/Flink-DataStream%20API%20%E5%AD%A6%E4%B9%A0/"/>
+    <id>http://liruijia.github.io/2021/01/17/Flink-DataStream%20API%20%E5%AD%A6%E4%B9%A0/</id>
     <published>2021-01-17T13:11:15.000Z</published>
     <updated>2021-01-22T15:27:08.249Z</updated>
     
@@ -108,19 +133,19 @@
     
     
     
-    <category term="大数据学习" scheme="http://example.com/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AD%A6%E4%B9%A0/"/>
+    <category term="大数据学习" scheme="http://liruijia.github.io/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AD%A6%E4%B9%A0/"/>
     
-    <category term="Flink" scheme="http://example.com/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AD%A6%E4%B9%A0/Flink/"/>
+    <category term="Flink" scheme="http://liruijia.github.io/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AD%A6%E4%B9%A0/Flink/"/>
     
     
-    <category term="Flink" scheme="http://example.com/tags/Flink/"/>
+    <category term="Flink" scheme="http://liruijia.github.io/tags/Flink/"/>
     
   </entry>
   
   <entry>
     <title>Flume日志采集</title>
-    <link href="http://example.com/2021/01/17/Flume%E6%97%A5%E5%BF%97%E9%87%87%E9%9B%86/"/>
-    <id>http://example.com/2021/01/17/Flume%E6%97%A5%E5%BF%97%E9%87%87%E9%9B%86/</id>
+    <link href="http://liruijia.github.io/2021/01/17/Flume%E6%97%A5%E5%BF%97%E9%87%87%E9%9B%86/"/>
+    <id>http://liruijia.github.io/2021/01/17/Flume%E6%97%A5%E5%BF%97%E9%87%87%E9%9B%86/</id>
     <published>2021-01-17T13:11:15.000Z</published>
     <updated>2021-01-22T15:13:37.803Z</updated>
     
@@ -131,21 +156,21 @@
     
     
     
-    <category term="大数据学习" scheme="http://example.com/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AD%A6%E4%B9%A0/"/>
+    <category term="大数据学习" scheme="http://liruijia.github.io/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AD%A6%E4%B9%A0/"/>
     
-    <category term="日志采集" scheme="http://example.com/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AD%A6%E4%B9%A0/%E6%97%A5%E5%BF%97%E9%87%87%E9%9B%86/"/>
+    <category term="日志采集" scheme="http://liruijia.github.io/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AD%A6%E4%B9%A0/%E6%97%A5%E5%BF%97%E9%87%87%E9%9B%86/"/>
     
     
-    <category term="flume" scheme="http://example.com/tags/flume/"/>
+    <category term="flume" scheme="http://liruijia.github.io/tags/flume/"/>
     
-    <category term="HDFS" scheme="http://example.com/tags/HDFS/"/>
+    <category term="HDFS" scheme="http://liruijia.github.io/tags/HDFS/"/>
     
   </entry>
   
   <entry>
     <title>数据仓库</title>
-    <link href="http://example.com/2021/01/17/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/"/>
-    <id>http://example.com/2021/01/17/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/</id>
+    <link href="http://liruijia.github.io/2021/01/17/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/"/>
+    <id>http://liruijia.github.io/2021/01/17/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/</id>
     <published>2021-01-17T10:36:49.000Z</published>
     <updated>2021-01-22T15:14:11.433Z</updated>
     
@@ -156,12 +181,12 @@
     
     
     
-    <category term="数据仓库" scheme="http://example.com/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/"/>
+    <category term="数据仓库" scheme="http://liruijia.github.io/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/"/>
     
     
-    <category term="全量" scheme="http://example.com/tags/%E5%85%A8%E9%87%8F/"/>
+    <category term="全量" scheme="http://liruijia.github.io/tags/%E5%85%A8%E9%87%8F/"/>
     
-    <category term="增量" scheme="http://example.com/tags/%E5%A2%9E%E9%87%8F/"/>
+    <category term="增量" scheme="http://liruijia.github.io/tags/%E5%A2%9E%E9%87%8F/"/>
     
   </entry>
   

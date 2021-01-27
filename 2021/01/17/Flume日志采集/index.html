@@ -21,18 +21,18 @@
 
 <script class="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","version":"8.2.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"manual"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+    var CONFIG = {"hostname":"liruijia.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.2.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"manual"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 <meta name="description" content="Flume是cloudera开发的后来贡献给了Apache的一套用分布式，高可靠的，高可用的海量分布式日志采集、聚合和传输的系统，将大量日志数据从许多不同的源移动到一个集中的数据存储。其在日志文件进行采集过程中起到了很重要的作用，下面将对于进行详细介绍，并进行案例介绍！">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Flume日志采集">
-<meta property="og:url" content="http://example.com/2021/01/17/Flume%E6%97%A5%E5%BF%97%E9%87%87%E9%9B%86/index.html">
+<meta property="og:url" content="http://liruijia.github.io/2021/01/17/Flume%E6%97%A5%E5%BF%97%E9%87%87%E9%9B%86/index.html">
 <meta property="og:site_name" content="Liruijia&#39;s Blog">
 <meta property="og:description" content="Flume是cloudera开发的后来贡献给了Apache的一套用分布式，高可靠的，高可用的海量分布式日志采集、聚合和传输的系统，将大量日志数据从许多不同的源移动到一个集中的数据存储。其在日志文件进行采集过程中起到了很重要的作用，下面将对于进行详细介绍，并进行案例介绍！">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://img2020.cnblogs.com/blog/1620989/202101/1620989-20210122225816353-596309472.png">
 <meta property="og:image" content="https://img2020.cnblogs.com/blog/1620989/202101/1620989-20210122225821153-557297293.png">
-<meta property="og:image" content="http://example.com/2021/01/17/Flume%E6%97%A5%E5%BF%97%E9%87%87%E9%9B%86/img/flume3.png">
+<meta property="og:image" content="http://liruijia.github.io/2021/01/17/Flume%E6%97%A5%E5%BF%97%E9%87%87%E9%9B%86/img/flume3.png">
 <meta property="og:image" content="https://img2020.cnblogs.com/blog/1620989/202101/1620989-20210122225931033-1937068728.png">
 <meta property="og:image" content="https://img2020.cnblogs.com/blog/1620989/202101/1620989-20210122225940383-582032821.png">
 <meta property="article:published_time" content="2021-01-17T13:11:15.000Z">
@@ -44,7 +44,7 @@
 <meta name="twitter:image" content="https://img2020.cnblogs.com/blog/1620989/202101/1620989-20210122225816353-596309472.png">
 
 
-<link rel="canonical" href="http://example.com/2021/01/17/Flume%E6%97%A5%E5%BF%97%E9%87%87%E9%9B%86/">
+<link rel="canonical" href="http://liruijia.github.io/2021/01/17/Flume%E6%97%A5%E5%BF%97%E9%87%87%E9%9B%86/">
 
 
 <script data-pjax class="page-configurations">
@@ -212,20 +212,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-count">7</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -238,7 +238,7 @@
         <a href="mailto:2406891860@qq.com" title="E-Mail → mailto:2406891860@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
       </span>
       <span class="links-of-author-item">
-        <a href="https://www.cnblogs.com/learn-ruijiali/" title="Cnblogs → https:&#x2F;&#x2F;www.cnblogs.com&#x2F;learn-ruijiali&#x2F;" rel="noopener" target="_blank"><i class="fab fa-blog fa-fw"></i>Cnblogs</a>
+        <a href="https://www.cnblogs.com/learn-ruijiali/" title="Cnblogs → https:&#x2F;&#x2F;www.cnblogs.com&#x2F;learn-ruijiali&#x2F;" rel="noopener" target="_blank"><i class="fab fa-blogs fa-fw"></i>Cnblogs</a>
       </span>
   </div>
 
@@ -276,7 +276,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/17/Flume%E6%97%A5%E5%BF%97%E9%87%87%E9%9B%86/">
+    <link itemprop="mainEntityOfPage" href="http://liruijia.github.io/2021/01/17/Flume%E6%97%A5%E5%BF%97%E9%87%87%E9%9B%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/3.jpg">
@@ -503,7 +503,7 @@
   </li>
   <li class="post-copyright-link">
       <strong>本文链接：</strong>
-      <a href="http://example.com/2021/01/17/Flume%E6%97%A5%E5%BF%97%E9%87%87%E9%9B%86/" title="Flume日志采集">http://example.com/2021/01/17/Flume日志采集/</a>
+      <a href="http://liruijia.github.io/2021/01/17/Flume%E6%97%A5%E5%BF%97%E9%87%87%E9%9B%86/" title="Flume日志采集">http://liruijia.github.io/2021/01/17/Flume日志采集/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！

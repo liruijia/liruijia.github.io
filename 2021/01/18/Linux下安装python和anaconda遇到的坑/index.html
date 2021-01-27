@@ -21,12 +21,12 @@
 
 <script class="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","version":"8.2.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"manual"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+    var CONFIG = {"hostname":"liruijia.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.2.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"manual"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 <meta name="description" content="今天本来不打算写文，但是今天发生了一件娱乐圈今天大事:smile:,虽然和我没有什么关系，但是还说想记录一下自己的感受，zs的事情真的跌破三观。 下面还是开始本文吧，这文章主要记录一下，在Linux环境下安装Python和Anaconda遇到的坑！对于Python和Anaconda到底如何安装下面会给出一些连接来供大家参考。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux下安装Python和Anaconda遇到的坑">
-<meta property="og:url" content="http://example.com/2021/01/18/Linux%E4%B8%8B%E5%AE%89%E8%A3%85python%E5%92%8Canaconda%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/index.html">
+<meta property="og:url" content="http://liruijia.github.io/2021/01/18/Linux%E4%B8%8B%E5%AE%89%E8%A3%85python%E5%92%8Canaconda%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/index.html">
 <meta property="og:site_name" content="Liruijia&#39;s Blog">
 <meta property="og:description" content="今天本来不打算写文，但是今天发生了一件娱乐圈今天大事:smile:,虽然和我没有什么关系，但是还说想记录一下自己的感受，zs的事情真的跌破三观。 下面还是开始本文吧，这文章主要记录一下，在Linux环境下安装Python和Anaconda遇到的坑！对于Python和Anaconda到底如何安装下面会给出一些连接来供大家参考。">
 <meta property="og:locale" content="zh_CN">
@@ -41,7 +41,7 @@
 <meta name="twitter:image" content="https://img2020.cnblogs.com/blog/1620989/202101/1620989-20210122173802791-1338678861.png">
 
 
-<link rel="canonical" href="http://example.com/2021/01/18/Linux%E4%B8%8B%E5%AE%89%E8%A3%85python%E5%92%8Canaconda%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/">
+<link rel="canonical" href="http://liruijia.github.io/2021/01/18/Linux%E4%B8%8B%E5%AE%89%E8%A3%85python%E5%92%8Canaconda%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/">
 
 
 <script data-pjax class="page-configurations">
@@ -209,20 +209,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-count">7</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -235,7 +235,7 @@
         <a href="mailto:2406891860@qq.com" title="E-Mail → mailto:2406891860@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
       </span>
       <span class="links-of-author-item">
-        <a href="https://www.cnblogs.com/learn-ruijiali/" title="Cnblogs → https:&#x2F;&#x2F;www.cnblogs.com&#x2F;learn-ruijiali&#x2F;" rel="noopener" target="_blank"><i class="fab fa-blog fa-fw"></i>Cnblogs</a>
+        <a href="https://www.cnblogs.com/learn-ruijiali/" title="Cnblogs → https:&#x2F;&#x2F;www.cnblogs.com&#x2F;learn-ruijiali&#x2F;" rel="noopener" target="_blank"><i class="fab fa-blogs fa-fw"></i>Cnblogs</a>
       </span>
   </div>
 
@@ -273,7 +273,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/18/Linux%E4%B8%8B%E5%AE%89%E8%A3%85python%E5%92%8Canaconda%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/">
+    <link itemprop="mainEntityOfPage" href="http://liruijia.github.io/2021/01/18/Linux%E4%B8%8B%E5%AE%89%E8%A3%85python%E5%92%8Canaconda%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/3.jpg">
@@ -402,7 +402,7 @@
   </li>
   <li class="post-copyright-link">
       <strong>本文链接：</strong>
-      <a href="http://example.com/2021/01/18/Linux%E4%B8%8B%E5%AE%89%E8%A3%85python%E5%92%8Canaconda%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/" title="Linux下安装Python和Anaconda遇到的坑">http://example.com/2021/01/18/Linux下安装python和anaconda遇到的坑/</a>
+      <a href="http://liruijia.github.io/2021/01/18/Linux%E4%B8%8B%E5%AE%89%E8%A3%85python%E5%92%8Canaconda%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/" title="Linux下安装Python和Anaconda遇到的坑">http://liruijia.github.io/2021/01/18/Linux下安装python和anaconda遇到的坑/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -425,6 +425,9 @@
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/2021/01/27/kmeans%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0/" rel="next" title="kmeans源码学习 之">
+                  kmeans源码学习 之 <i class="fa fa-chevron-right"></i>
+                </a>
             </div>
           </div>
     </footer>
