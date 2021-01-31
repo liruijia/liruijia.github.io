@@ -45,8 +45,7 @@
   <entry>
     <title>Linux下安装Python和Anaconda遇到的坑</title>
     <url>/2021/01/18/Linux%E4%B8%8B%E5%AE%89%E8%A3%85python%E5%92%8Canaconda%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/</url>
-    <content><![CDATA[<p>今天本来不打算写文，但是今天发生了一件娱乐圈今天大事:smile:,虽然和我没有什么关系，但是还说想记录一下自己的感受，zs的事情真的跌破三观。</p>
-<p>下面还是开始本文吧，这文章主要记录一下，在Linux环境下安装Python和Anaconda遇到的坑！对于Python和Anaconda到底如何安装下面会给出一些连接来供大家参考。</p>
+    <content><![CDATA[<p>最近在Linux中安装Python和Anaconda，怎么说了对于没有经验的我来说，虽然不难但是还是有一点麻烦，感觉要修改好多参数，所以这篇文章主要记录一下，在Linux环境下安装Python和Anaconda遇到的坑！对于Python和Anaconda到底如何安装下面会给出一些链接来供大家参考。</p>
 <a id="more"></a>
 
 <h1 id="安装教程"><a href="#安装教程" class="headerlink" title="安装教程"></a>安装教程</h1><p><strong>安装Python3:</strong> </p>
