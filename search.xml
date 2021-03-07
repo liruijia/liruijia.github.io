@@ -76,10 +76,10 @@
 <ul>
 <li><p><strong>邻接矩阵</strong>，则是通过矩阵的方式来表示，顶点之间的关系。 左边为所示的无向图，右边为相应的邻接矩阵。</p>
 <p>对于无向图来说，可以发现主对角线全为0 （表示不相连），1表示两个顶点之间相连。且邻接矩阵是对称的。利用邻接矩阵来进行存储，其时间复杂度为O(n^2)</p>
-<p><a href="https://sm.ms/image/E9JWr5jdoI2CFLQ" target="_blank"><img src="https://i.loli.net/2021/03/07/E9JWr5jdoI2CFLQ.png"></a></p>
+<p><a href="https://sm.ms/image/xXQeSjEAg7Lz3qv" target="_blank"><img src="https://i.loli.net/2021/03/07/xXQeSjEAg7Lz3qv.png"></a></p>
 <p><strong>邻接表</strong></p>
 <p>把顶点之间的关系存放到一个slot中，如下图所示，总共有7个顶点，则邻接表-数组adj的长度可以设置成7，其索引表示一个顶点，索引处存放一个队列/列表，用来存储其相连的顶点。</p>
-<p><a href="https://sm.ms/image/oGV1WLQZnvdzIMl" target="_blank"><img src="https://i.loli.net/2021/03/07/oGV1WLQZnvdzIMl.png"></a></p>
+<p><a href="https://sm.ms/image/A3Q9PNnFDy7jRoH" target="_blank"><img src="https://i.loli.net/2021/03/07/A3Q9PNnFDy7jRoH.png"></a></p>
 </li>
 </ul>
 <p>有的时候，我们还可以利用JSON来保存一个图（无向图) , key表示顶点，value表示相邻的顶点。</p>
