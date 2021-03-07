@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>DFS--深层优先遍历图算法（一）</title>
+    <title>DFS-深层优先遍历图算法（一）</title>
     <url>/2021/03/07/DFS-%E6%B7%B1%E5%B1%82%E4%BC%98%E5%85%88%E9%81%8D%E5%8E%86%E5%9B%BE%E7%AE%97%E6%B3%95%EF%BC%88%E4%B8%80%EF%BC%89/</url>
     <content><![CDATA[<p>DFS—深度优先遍历算法，对于解决搜索&amp;遍历问题有很大的帮助，通常解决，一个图结构中”存不存在”、“是否有”等问题。</p>
 <a id="more"></a>
@@ -16,7 +16,7 @@
 </ul>
 <h1 id="DFS搜索过程演示"><a href="#DFS搜索过程演示" class="headerlink" title="DFS搜索过程演示"></a>DFS搜索过程演示</h1><p>如下是一个含有7个节点的无向图。</p>
 <h2 id="图-遍历搜索"><a href="#图-遍历搜索" class="headerlink" title="图-遍历搜索"></a>图-遍历搜索</h2><p><strong>问题1 ： 判断是否存在一条从V0-V6的路径。</strong></p>
-<p>​                   <img src="/.io//tu.png" alt="img"></p>
+<p>​                   <img src="/.io//tu.png" alt="img"> </p>
 <p><strong>搜索过程为：</strong></p>
 <ul>
 <li><p>V0-&gt;V1-&gt;V4，此时到底尽头，仍然到不了V6，于是原路返回到V1去搜索其他路径；</p>
@@ -31,7 +31,7 @@
 <p><strong>问题2 ： 判断是否存在一条从V0-V6长度为3的路径。</strong></p>
 <p>对于下面只有7个顶点的图来说，我们可以一眼看出来，是存在长度为3从V0到V6的路径：V0–&gt;V2–&gt;V6.</p>
 <p>但是，当图中的点很多的时候，还是不容易看出来的，所以还是看一下DFS的一个搜索过程。</p>
-<p><img src="/.io//%E5%9B%BE.png" alt="img"></p>
+<p><img src="/.io//tu.png" alt="img"></p>
 <p><strong>搜索过程：</strong></p>
 <p>搜索过程1 ：</p>
 <ul>
@@ -89,54 +89,7 @@
 ]]></content>
       <categories>
         <category>算法</category>
-        <category>图</category>
       </categories>
-      <tags>
-        <tag>图</tag>
-        <tag>算法</tag>
-        <tag>DFS</tag>
-        <tag>遍历</tag>
-        <tag>递归 - 搜索</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Linux下安装Python和Anaconda遇到的坑</title>
-    <url>/2021/01/18/Linux%E4%B8%8B%E5%AE%89%E8%A3%85python%E5%92%8Canaconda%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/</url>
-    <content><![CDATA[<p>最近在Linux中安装Python和Anaconda，怎么说了对于没有经验的我来说，虽然不难但是还是有一点麻烦，感觉要修改好多参数，所以这篇文章主要记录一下，在Linux环境下安装Python和Anaconda遇到的坑！对于Python和Anaconda到底如何安装下面会给出一些链接来供大家参考。</p>
-<a id="more"></a>
-
-<h1 id="安装教程"><a href="#安装教程" class="headerlink" title="安装教程"></a>安装教程</h1><p><strong>安装Python3:</strong> </p>
-<p>​        <a href="https://www.cnblogs.com/Jimc/p/10218387.html">Linux下安装python3</a>  操作系统Ubuntu</p>
-<p>​        <a href="https://www.cnblogs.com/kimyeee/p/7250560.html">Linux下安装Python3.6和第三方库</a> 安装环境Linux</p>
-<p><strong>安装Anaconda:</strong></p>
-<p>​        <a href="https://blog.csdn.net/Ni_hao2017/article/details/103346694">Linux安装anaconda与jupyter notebook配置</a> 提到了Anaconda 和 jupyter notebook的配置</p>
-<h1 id="踩到的坑"><a href="#踩到的坑" class="headerlink" title="踩到的坑"></a>踩到的坑</h1><h2 id="问题1-ctype问题"><a href="#问题1-ctype问题" class="headerlink" title="问题1 ctype问题"></a>问题1 ctype问题</h2><p>python 编译过程（执行make &amp;&amp; make install）中， ctype报错问题</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 在python安装目录下执行：</span></span><br><span class="line">yum -y install zlib* </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 执行下面命令，此处换成你自己的python3安装路径 ，并<span class="built_in">cd</span>到Modules/Setup目录下</span> </span><br><span class="line">vim /usr/local/python3/Python-3.6.8/Modules/Setup  </span><br><span class="line"><span class="meta">#</span><span class="bash"> 进去该文件之后找到下面这一句 去掉注释 退出保存 (esc -&gt; :wq)</span></span><br><span class="line"><span class="meta">#</span><span class="bash">zlib zlibmodule.c -I$(prefix)/include -L$(exec_prefix)/lib -lz</span>  </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="built_in">cd</span>到python3的安装路径下 重新编译</span></span><br><span class="line">make &amp; make install </span><br></pre></td></tr></table></figure>
-<h2 id="问题2-版本更改"><a href="#问题2-版本更改" class="headerlink" title="问题2 版本更改"></a>问题2 版本更改</h2><p>安装完毕之后，设置python3为默认的版本</p>
-<p>Linux系统下一般都会自带python2的版本，但是一般情况下很少用到这个版本，但是不能删除，因为有的应用程序执行代码还是需要到这个版本的python（比如，执行datax任务的时候，datax.py文件是用python2编译的）。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 删除python旧链 系统配置文件路径（不变）</span></span><br><span class="line">rm -rf /usr/bin/python </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">创建python3 软链</span></span><br><span class="line">ln -s /usr/local/python3/bin/python3  /usr/bin/python  # 前面的路径是你python3的安装路径，cd到bin/python3路径下</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">软链检查路径</span></span><br><span class="line">whereis python </span><br></pre></td></tr></table></figure>
-<p>完成上述过程之后，在任意路径下执行<code>python</code>，即可进入python空间，通过可以看到python的版本，出现如下所图说明安装成功。下图中框出来两个部分，分别表示python3和anaconda3安装成功！</p>
-<p><img src="https://img2020.cnblogs.com/blog/1620989/202101/1620989-20210122173802791-1338678861.png">  </p>
-<h2 id="问题3-激活虚拟环境"><a href="#问题3-激活虚拟环境" class="headerlink" title="问题3 激活虚拟环境"></a>问题3 激活虚拟环境</h2><p>anaconda安装虚拟环境之后，激活不了虚拟环境</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">执行如下命令  激活activate环境 执行完此命令之后，会出现上图中 <span class="string">&quot;(base)&quot;</span> 表示anaconda的基本环境</span></span><br><span class="line">source activate</span><br><span class="line"></span><br><span class="line">conda deactivate # 退出base环境</span><br><span class="line"></span><br><span class="line">conda activate 你的环境名  # 激活你自己建的虚拟环境</span><br></pre></td></tr></table></figure>
-<h2 id="问题4-配置阿里源"><a href="#问题4-配置阿里源" class="headerlink" title="问题4 配置阿里源"></a>问题4 配置阿里源</h2><p>配置阿里源的主要原因是阿里源是真的快！！！</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> pip配置</span></span><br><span class="line">pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/ </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">conda配置</span></span><br><span class="line">conda config --add channels http://mirrors.aliyun.com/pypi/simple/</span><br><span class="line">conda config --set show_channel_urls yes </span><br></pre></td></tr></table></figure>
-<h2 id="问题5-jupyter-notebook-root"><a href="#问题5-jupyter-notebook-root" class="headerlink" title="问题5 jupyter notebook - root"></a>问题5 jupyter notebook - root</h2><p>打开jupyter notebook，出现root问题</p>
-<p><code>Running as **root** is not recommended. Use –allow-root to bypass</code></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">执行以下命令</span></span><br><span class="line">jupyter notebook --generate-config</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">在生成的 jupyter_notebook_config.py 修改配置</span></span><br><span class="line">vim /root/.jupyter/jupyter_notebook_config.py</span><br><span class="line">将c.NotebookApp.allow_root = False前边的  &#x27;#&#x27;去掉，在把False修改为True</span><br></pre></td></tr></table></figure>
-<h2 id="问题6-配置jupyter"><a href="#问题6-配置jupyter" class="headerlink" title="问题6 配置jupyter"></a>问题6 配置jupyter</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 任意路径下输入 ，此命令会在 /root/.jupyter 路径下生成一个py文件</span></span><br><span class="line">jupyter notebook --generate-config</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 进入python编译环境</span> </span><br><span class="line">python</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 进入编辑环境之后执行：</span></span><br><span class="line">from notebook.auth import passwd  </span><br><span class="line">passwd()  # 输入你自己的命令，并保存最后的hash结果 ，如下面展示的一样，是哈希之后的密码&quot;argon2:$argon2id$v=19$m=10240,t=10,p=8$g9crgnSC05ADyr3kR3qSZQ$PaU8QhZOEbZrAqQrgHHyeQ&quot;</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 退出编译环境</span></span><br><span class="line">exit()</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 编译 /root/.jupyter/jupyter_notebook_config.py</span> </span><br><span class="line">vim /root/.jupyter/jupyter_notebook_config.py</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 进入之后，找到如下行， 或者 直接复制进行 修改参数即可</span></span><br><span class="line">c.NotebookApp.ip=&#x27;你自己的服务器IP&#x27;       # 也可以设置成&#x27;*&#x27;表示所有ip皆可访问，但是还是建议写成自己的服务器IP,这样好调用</span><br><span class="line">c.NotebookApp.password = &#x27;sha:ce...     # 上面复制hash之后的密码 </span><br><span class="line">c.NotebookApp.open_browser = False       # 禁止自动打开浏览器  </span><br><span class="line">c.NotebookApp.port =8888                 # 端口 不一定要写成8888 ， 你可以自己设定一个端口</span><br><span class="line">c.NotebookApp.notebook_dir = &#x27;/home/xxx&#x27; #在进入到jupyter环境中的公开目录 </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 配置完上面信息之后 保存退出</span></span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>踩坑日记</category>
-        <category>python系</category>
-        <category>安装日记</category>
-        <category>python系</category>
-      </categories>
-      <tags>
-        <tag>Linux</tag>
-        <tag>Python</tag>
-        <tag>Anaconda</tag>
-      </tags>
   </entry>
   <entry>
     <title>Flink-DataStream API接口开发规范</title>
@@ -178,6 +131,45 @@
       </categories>
       <tags>
         <tag>Flink</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux下安装Python和Anaconda遇到的坑</title>
+    <url>/2021/01/18/Linux%E4%B8%8B%E5%AE%89%E8%A3%85python%E5%92%8Canaconda%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/</url>
+    <content><![CDATA[<p>最近在Linux中安装Python和Anaconda，怎么说了对于没有经验的我来说，虽然不难但是还是有一点麻烦，感觉要修改好多参数，所以这篇文章主要记录一下，在Linux环境下安装Python和Anaconda遇到的坑！对于Python和Anaconda到底如何安装下面会给出一些链接来供大家参考。</p>
+<a id="more"></a>
+
+<h1 id="安装教程"><a href="#安装教程" class="headerlink" title="安装教程"></a>安装教程</h1><p><strong>安装Python3:</strong> </p>
+<p>​        <a href="https://www.cnblogs.com/Jimc/p/10218387.html">Linux下安装python3</a>  操作系统Ubuntu</p>
+<p>​        <a href="https://www.cnblogs.com/kimyeee/p/7250560.html">Linux下安装Python3.6和第三方库</a> 安装环境Linux</p>
+<p><strong>安装Anaconda:</strong></p>
+<p>​        <a href="https://blog.csdn.net/Ni_hao2017/article/details/103346694">Linux安装anaconda与jupyter notebook配置</a> 提到了Anaconda 和 jupyter notebook的配置</p>
+<h1 id="踩到的坑"><a href="#踩到的坑" class="headerlink" title="踩到的坑"></a>踩到的坑</h1><h2 id="问题1-ctype问题"><a href="#问题1-ctype问题" class="headerlink" title="问题1 ctype问题"></a>问题1 ctype问题</h2><p>python 编译过程（执行make &amp;&amp; make install）中， ctype报错问题</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 在python安装目录下执行：</span></span><br><span class="line">yum -y install zlib* </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 执行下面命令，此处换成你自己的python3安装路径 ，并<span class="built_in">cd</span>到Modules/Setup目录下</span> </span><br><span class="line">vim /usr/local/python3/Python-3.6.8/Modules/Setup  </span><br><span class="line"><span class="meta">#</span><span class="bash"> 进去该文件之后找到下面这一句 去掉注释 退出保存 (esc -&gt; :wq)</span></span><br><span class="line"><span class="meta">#</span><span class="bash">zlib zlibmodule.c -I$(prefix)/include -L$(exec_prefix)/lib -lz</span>  </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="built_in">cd</span>到python3的安装路径下 重新编译</span></span><br><span class="line">make &amp; make install </span><br></pre></td></tr></table></figure>
+<h2 id="问题2-版本更改"><a href="#问题2-版本更改" class="headerlink" title="问题2 版本更改"></a>问题2 版本更改</h2><p>安装完毕之后，设置python3为默认的版本</p>
+<p>Linux系统下一般都会自带python2的版本，但是一般情况下很少用到这个版本，但是不能删除，因为有的应用程序执行代码还是需要到这个版本的python（比如，执行datax任务的时候，datax.py文件是用python2编译的）。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 删除python旧链 系统配置文件路径（不变）</span></span><br><span class="line">rm -rf /usr/bin/python </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">创建python3 软链</span></span><br><span class="line">ln -s /usr/local/python3/bin/python3  /usr/bin/python  # 前面的路径是你python3的安装路径，cd到bin/python3路径下</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">软链检查路径</span></span><br><span class="line">whereis python </span><br></pre></td></tr></table></figure>
+<p>完成上述过程之后，在任意路径下执行<code>python</code>，即可进入python空间，通过可以看到python的版本，出现如下所图说明安装成功。下图中框出来两个部分，分别表示python3和anaconda3安装成功！</p>
+<p><img src="https://img2020.cnblogs.com/blog/1620989/202101/1620989-20210122173802791-1338678861.png">  </p>
+<h2 id="问题3-激活虚拟环境"><a href="#问题3-激活虚拟环境" class="headerlink" title="问题3 激活虚拟环境"></a>问题3 激活虚拟环境</h2><p>anaconda安装虚拟环境之后，激活不了虚拟环境</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">执行如下命令  激活activate环境 执行完此命令之后，会出现上图中 <span class="string">&quot;(base)&quot;</span> 表示anaconda的基本环境</span></span><br><span class="line">source activate</span><br><span class="line"></span><br><span class="line">conda deactivate # 退出base环境</span><br><span class="line"></span><br><span class="line">conda activate 你的环境名  # 激活你自己建的虚拟环境</span><br></pre></td></tr></table></figure>
+<h2 id="问题4-配置阿里源"><a href="#问题4-配置阿里源" class="headerlink" title="问题4 配置阿里源"></a>问题4 配置阿里源</h2><p>配置阿里源的主要原因是阿里源是真的快！！！</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> pip配置</span></span><br><span class="line">pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/ </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">conda配置</span></span><br><span class="line">conda config --add channels http://mirrors.aliyun.com/pypi/simple/</span><br><span class="line">conda config --set show_channel_urls yes </span><br></pre></td></tr></table></figure>
+<h2 id="问题5-jupyter-notebook-root"><a href="#问题5-jupyter-notebook-root" class="headerlink" title="问题5 jupyter notebook - root"></a>问题5 jupyter notebook - root</h2><p>打开jupyter notebook，出现root问题</p>
+<p><code>Running as **root** is not recommended. Use –allow-root to bypass</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">执行以下命令</span></span><br><span class="line">jupyter notebook --generate-config</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">在生成的 jupyter_notebook_config.py 修改配置</span></span><br><span class="line">vim /root/.jupyter/jupyter_notebook_config.py</span><br><span class="line">将c.NotebookApp.allow_root = False前边的  &#x27;#&#x27;去掉，在把False修改为True</span><br></pre></td></tr></table></figure>
+<h2 id="问题6-配置jupyter"><a href="#问题6-配置jupyter" class="headerlink" title="问题6 配置jupyter"></a>问题6 配置jupyter</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 任意路径下输入 ，此命令会在 /root/.jupyter 路径下生成一个py文件</span></span><br><span class="line">jupyter notebook --generate-config</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 进入python编译环境</span> </span><br><span class="line">python</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 进入编辑环境之后执行：</span></span><br><span class="line">from notebook.auth import passwd  </span><br><span class="line">passwd()  # 输入你自己的命令，并保存最后的hash结果 ，如下面展示的一样，是哈希之后的密码&quot;argon2:$argon2id$v=19$m=10240,t=10,p=8$g9crgnSC05ADyr3kR3qSZQ$PaU8QhZOEbZrAqQrgHHyeQ&quot;</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 退出编译环境</span></span><br><span class="line">exit()</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 编译 /root/.jupyter/jupyter_notebook_config.py</span> </span><br><span class="line">vim /root/.jupyter/jupyter_notebook_config.py</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 进入之后，找到如下行， 或者 直接复制进行 修改参数即可</span></span><br><span class="line">c.NotebookApp.ip=&#x27;你自己的服务器IP&#x27;       # 也可以设置成&#x27;*&#x27;表示所有ip皆可访问，但是还是建议写成自己的服务器IP,这样好调用</span><br><span class="line">c.NotebookApp.password = &#x27;sha:ce...     # 上面复制hash之后的密码 </span><br><span class="line">c.NotebookApp.open_browser = False       # 禁止自动打开浏览器  </span><br><span class="line">c.NotebookApp.port =8888                 # 端口 不一定要写成8888 ， 你可以自己设定一个端口</span><br><span class="line">c.NotebookApp.notebook_dir = &#x27;/home/xxx&#x27; #在进入到jupyter环境中的公开目录 </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 配置完上面信息之后 保存退出</span></span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>踩坑日记</category>
+        <category>python系</category>
+        <category>安装日记</category>
+        <category>python系</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+        <tag>Python</tag>
+        <tag>Anaconda</tag>
       </tags>
   </entry>
   <entry>
