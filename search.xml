@@ -1,6 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Datax同步数据--从ODPS到clickhouse</title>
+    <url>/2021/03/22/datax%E5%90%8C%E6%AD%A5%E6%95%B0%E6%8D%AE--%E4%BB%8EODPS%E5%88%B0clickhouse/</url>
+    <content><![CDATA[<p> Datax同步数据–从ODPS到clickhouse</p>
+<a id="more"></a>
+
+<h1 id="Datax-版本问题"><a href="#Datax-版本问题" class="headerlink" title="Datax 版本问题"></a>Datax 版本问题</h1><p>只有写过datax同步数据的文章，之前以为对于所有的数据源都直接使用官网上下载安装下来的datax版本就可以，后面发现并不是，将数据同步到clickhouse 需要安装特定版本的datax.</p>
+<p>百度了好久才发现这个问题:joy:,参考<a href="https://blog.csdn.net/qq_42455809/article/details/107632688">datax同步postgre到clickhouse</a>这一篇文章找到了下面这个链接：</p>
+<p>链接 ： <a href="https://pan.baidu.com/s/18DRihMXtf5IfQG4TIo-Crg">https://pan.baidu.com/s/18DRihMXtf5IfQG4TIo-Crg</a><br>提取码：qdyu</p>
+<h1 id="Datax同步脚本"><a href="#Datax同步脚本" class="headerlink" title="Datax同步脚本"></a>Datax同步脚本</h1><h2 id="从odps到clickhouse"><a href="#从odps到clickhouse" class="headerlink" title="从odps到clickhouse"></a>从odps到clickhouse</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;job&quot;: &#123;</span><br><span class="line">    &quot;setting&quot;: &#123;</span><br><span class="line">      &quot;speed&quot;: &#123;</span><br><span class="line">        &quot;channel&quot;: 1</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;errorLimit&quot;: &#123;</span><br><span class="line">        &quot;record&quot;: 0</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;content&quot;: [&#123;</span><br><span class="line">      &quot;reader&quot;: &#123;</span><br><span class="line">        &quot;name&quot;: &quot;odpsreader&quot;,</span><br><span class="line">        &quot;parameter&quot;: &#123;</span><br><span class="line">          &quot;accessId&quot;: &quot;******&quot;,   </span><br><span class="line">          &quot;accessKey&quot;: &quot;*******&quot;,</span><br><span class="line">          &quot;column&quot;: [</span><br><span class="line">            &quot;*&quot;                  </span><br><span class="line">          ],</span><br><span class="line">          &quot;odpsServer&quot;: &quot;http:&#x2F;&#x2F;***&#x2F;api&quot;,</span><br><span class="line">          &quot;project&quot;: &quot;***&quot;,</span><br><span class="line">          &quot;table&quot;: &quot;***&quot;,</span><br><span class="line">          &quot;tunnelServer&quot;: &quot;http:&#x2F;&#x2F;****&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;writer&quot;: &#123;</span><br><span class="line">        &quot;name&quot;: &quot;clickhousewriter&quot;,</span><br><span class="line">        &quot;parameter&quot;: &#123;</span><br><span class="line">          &quot;username&quot;: &quot;****&quot;,</span><br><span class="line">          &quot;password&quot;: &quot;****&quot;,</span><br><span class="line">          &quot;column&quot;:[&quot;*&quot;</span><br><span class="line">    ],</span><br><span class="line">          &quot;connection&quot;: [</span><br><span class="line">            &#123;</span><br><span class="line">              &quot;jdbcUrl&quot;: &quot;******&quot;,</span><br><span class="line">              &quot;table&quot;: [</span><br><span class="line">                &quot;*****&quot;</span><br><span class="line">              ]</span><br><span class="line">            &#125;</span><br><span class="line">          ],</span><br><span class="line">          &quot;batchSize&quot;: 65536,</span><br><span class="line">          &quot;batchByteSize&quot;: 134217728,</span><br><span class="line">          &quot;dryRun&quot;: false,</span><br><span class="line">          &quot;writeMode&quot;: &quot;insert&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>参数说明</strong></p>
+<p><strong>reader :</strong> </p>
+<ul>
+<li><p>accessId  –  阿里云账号 accessid</p>
+</li>
+<li><p>accessKey –  阿里云账号  accesskey </p>
+</li>
+<li><p>project  – odps中对应的项目空间名</p>
+</li>
+<li><p>odpsserver – odps server地址 对应于不同的所在区域的地址</p>
+</li>
+<li><p>tunnelServer – tunnel server </p>
+<p>odpsServer 和 tunnelServer地址 从<a href="https://help.aliyun.com/document_detail/34951.html?spm=a2c4g.11186623.6.599.670a2996TymW0I">MaxCompute配置Endpoint</a>中查找。</p>
+</li>
+</ul>
+<p><strong>writer :</strong> </p>
+<ul>
+<li>username  – clickhouse用户</li>
+<li>password  –  密码</li>
+<li>jdbcUrl   – clickhouse 的 jdbc地址</li>
+</ul>
+<p><strong>公用：</strong></p>
+<ul>
+<li><p>column    –  所有的字段名  “*” 表示全部 ，不过在真实的场景中 最好将所有的字段列出来</p>
+</li>
+<li><p>table – 表名</p>
+</li>
+</ul>
+<p>想要了解odps写入 / click读取操作可以参考以下几个链接：</p>
+<p><a href="https://github.com/alibaba/DataX/blob/master/odpswriter/doc/odpswriter.md">官方示例写入opds数据</a></p>
+<p><a href="https://github.com/alibaba/DataX/">Datax官方文档</a></p>
+<p><a href="https://my.oschina.net/u/4580416/blog/4360748">Datax的Clickhouse读写操作</a></p>
+<p><a href="https://cloud.tencent.com/developer/article/1541576">Datax的Clickhouse读写插件</a></p>
+<p><a href="https://help.aliyun.com/document_detail/156618.html?spm=a2c4g.11186623.6.569.6e4059784ZE8Sa">云数据库Clickhouse官方-使用DataX同步数据示例</a> </p>
+<h1 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h1><p><strong>问题：脏数据问题</strong></p>
+<p><a href="https://sm.ms/image/OURjmMkuotvHA3n" target="_blank"><img src="https://i.loli.net/2021/03/22/OURjmMkuotvHA3n.png"></a></p>
+<p>找到如下图所示的地方，找到了原因，发现clickhouse在导入数据的时候，不支持null值，所以对源数据中null值进行处理就好。</p>
+<p><a href="https://sm.ms/image/CR9wWdeHKQjBX61" target="_blank"><img src="https://i.loli.net/2021/03/22/CR9wWdeHKQjBX61.png"></a></p>
+<p>总的来说，利用是配置好相应的参数，数据格式处理好，基本没有太大的问题。</p>
+]]></content>
+      <categories>
+        <category>大数据学习</category>
+      </categories>
+      <tags>
+        <tag>数据同步</tag>
+        <tag>Datax</tag>
+        <tag>Clickhouse</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>DFS-深层优先遍历图算法（一）</title>
     <url>/2021/03/07/DFS-%E6%B7%B1%E5%B1%82%E4%BC%98%E5%85%88%E9%81%8D%E5%8E%86%E5%9B%BE%E7%AE%97%E6%B3%95%EF%BC%88%E4%B8%80%EF%BC%89/</url>
     <content><![CDATA[<p>DFS—深度优先遍历算法，对于解决搜索&amp;遍历问题有很大的帮助，通常解决，一个图结构中”存不存在”、“是否有”等问题。</p>
@@ -99,45 +158,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Flink-DataStream API接口开发规范</title>
-    <url>/2021/01/17/Flink_DataStream%20API%E6%8E%A5%E5%8F%A3%E5%BC%80%E5%8F%91%E8%A7%84%E8%8C%83/</url>
-    <content><![CDATA[<p>Flink 提供了丰富的客户端操作来提交任务和与任务进行交互,利用flink进行实时统计之前先对其接口开发流程进行了解，Flink提供了Java/sql接口，下面主要就Java-api进行介绍。有不太正确的地方忘纠正！！！</p>
-<a id="more"></a>
-
-<h1 id="基本的开发流程"><a href="#基本的开发流程" class="headerlink" title="基本的开发流程"></a>基本的开发流程</h1><p>流处理系统一般采用一种数据驱动的处理方式。它会提前设置一些算子，然后等到数据到达后对数据进行处理。为了表达复杂的计算逻辑，包括 Flink 在内的分布式流处理引擎一般采用 DAG 图来表示整个计算逻辑，其中 DAG 图中的每一个点就代表一个基本的逻辑单元，也就是前面说的算子。由于计算逻辑被组织成有向图，数据会按照边的方向，从一些特殊的 Source 节点流入系统，然后通过网络传输、本地传输等不同的数据传输方式在算子之间进行发送和处理，最后会通过另外一些特殊的 Sink 节点将计算结果发送到某个外部系统或数据库中。<br>但是实际的情况可能会比较复杂一点，一个算子可能有多个实例，因此在真实的计算的时候，不同算子之间的不同实例间会进行数据交换。只有当算子实例分布到不同进程上时，才需要通过网络进行数据传输，而同一进程中的多个实例之间的数据传输通常是不需要通过网络的。</p>
-<p>基于 Apache Storm 用户需要在图中添加 Spout 或 Bolt 这种算子，并指定算子之前的连接方式。这样，在完成整个图的构建之后，就可以将图提交到远程或本地集群运行。与之对比，Apache Flink 的接口虽然也是在构建计算逻辑图，但是 Flink 的 API 定义更加面向数据本身的处理逻辑，它把数据流抽象成为一个无限集，然后定义了一组集合上的操作，然后在底层自动构建相应的 DAG 图。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 构造表达DAG</span></span><br><span class="line"></span><br><span class="line"><span class="number">1.</span> 创建 StreamExecutionEnvironment  </span><br><span class="line">设置运行环境  + 可以用来设置参数和创建数据源以及提交任务 </span><br><span class="line">StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();</span><br><span class="line"></span><br><span class="line"><span class="number">2.</span> 配置数据源读取数据</span><br><span class="line">	DataStream&lt;String&gt; text = env.readTextFile (<span class="string">&quot;input&quot;</span>);</span><br><span class="line">	DataStream&lt;String&gt; text = env.addSource(<span class="keyword">new</span> DataSource()) <span class="comment">// 参数为 自定义的模拟数据源的方法</span></span><br><span class="line">或者</span><br><span class="line">	DataStreamSource&lt;String&gt; stream = env.socketTextStream(hostname, port);</span><br><span class="line"></span><br><span class="line"><span class="number">3.</span>处理数据 进行一系列转换 </span><br><span class="line">DataStream&lt;Tuple2&lt;String, Integer&gt;&gt; counts = text.flatMap(<span class="keyword">new</span> Tokenizer()).keyBy(<span class="number">0</span>).sum(<span class="number">1</span>);</span><br><span class="line">SingleOutputStreamOperator&lt;Tuple2&lt;String, Integer&gt;&gt; sum = stream.flatMap(<span class="keyword">new</span> LineSplitter()).keyBy(<span class="number">0</span>).sum(<span class="number">1</span>);</span><br><span class="line">（这个地方的处理数据的函数 ， 可以自定义 也可以 使用 API）</span><br><span class="line"></span><br><span class="line"><span class="number">4.</span> 配置数据汇写出数据</span><br><span class="line">counts.writeAsText(<span class="string">&quot;output&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="number">5.</span> 提交执行</span><br><span class="line">env.execute(<span class="string">&quot;Java WordCount from SocketTextStream Example&quot;</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// WordCount </span></span><br><span class="line"><span class="keyword">final</span> StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();</span><br><span class="line">DataStreamSource&lt;String&gt; stream = env.socketTextStream(hostname, port);</span><br><span class="line">SingleOutputStreamOperator&lt;Tuple2&lt;String, Integer&gt;&gt; sum = stream.flatMap(<span class="keyword">new</span> LineSplitter()).keyBy(<span class="number">0</span>).sum(<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
-<p>在 Word Count 例子中，我们首先将每一条记录（即文件中的一行）分隔为单词，这是通过 FlatMap 操作来实现的。调用 FlatMap 将会在底层的 DAG 图中添加一个 FlatMap 算子。然后，我们得到了一个记录是单词的流。我们将流中的单词进行分组（keyBy），然后累积计算每一个单词的数据（sum(1)）。计算出的单词的数据组成了一个新的流，我们将它写入到输出文件中。<br>Flink调用算子机会在DAG图中建立添加相应的算子节点。<br>前面我们调用的所有方法，都不是在实际处理数据，而是在构通表达计算逻辑的 DAG 图。只有当我们将整个图构建完成并显式的调用 Execute 方法后，框架才会把计算图提供到集群中，接入数据并执行实际的逻辑。<br>Flink 累计计算， Flink 在进行处理的时候，每一次按照设定的时间窗口进行相应的算子，当新的数据进来之后，在原来的基础上进行相应的计算，达到累计的效果。window主要达到了切分的效果，通过过 Window 操作对流可以按时间或者个数进行一些切分，从而将流切分成一个个较小的分组。具体的切分逻辑可以由用户进行选择。当一个分组中所有记录都到达后，用户可以拿到该分组中的所有记录，从而可以进行一些遍历或者累加操作。这样，对每个分组的处理都可以得到一组输出数据，这些输出数据形成了一个新的基本流。</p>
-<h1 id="DataStream操作分类"><a href="#DataStream操作分类" class="headerlink" title="DataStream操作分类"></a>DataStream操作分类</h1><p>Flink DataStream API 的核心，就是代表流数据的 DataStream 对象。整个计算逻辑图的构建就是围绕调用 DataStream 对象上的不同操作产生新的 DataStream 对象展开的。DataStream 上的操作可以分为四类 ： </p>
-<ul>
-<li><p>对于单条记录的操作，比如筛除掉不符合要求的记录（Filter 操作），或者将每条记录都做一个转换（Map 操作）</p>
-</li>
-<li><p>对多条记录的操作。比如说统计一个小时内的订单总成交量，就需要将一个小时内的所有订单记录的成交量加到一起。通过 Window 将需要的记录关联到一起进行处</p>
-</li>
-<li><p>对多个流进行操作并转换为单个流，例如，多个流可以通过 Union、Join 或 Connect 等操作合到一起。这些操作合并的逻辑不同，但是它们最终都会产生了一个新的统一的流，从而可以进行一些跨流的操作。</p>
-</li>
-<li><p>DataStream 还支持与合并对称的操作，即把一个流按一定规则拆分为多个流（Split 操作），每个流是之前流的一个子集，这样我们就可以对不同的流作不同的处理</p>
-<p><a href="https://sm.ms/image/7bzot8QN156Ovwy" target="_blank"><img src="https://i.loli.net/2021/03/07/7bzot8QN156Ovwy.png"></a></p>
-</li>
-</ul>
-<p>对于普通的 DataStream，我们必须使用 allWindow 操作，它代表对整个流进行统一的 Window 处理，因此是不能使用多个算子实例进行同时计算的。针对这一问题，就需要我们首先使用 KeyBy 方法对记录按 Key 进行分组，然后才可以并行的对不同 Key 对应的记录进行单独的 Window 操作。KeyBy 操作是我们日常编程中最重要的操作之一。</p>
-<h1 id="DataStream的分组方式"><a href="#DataStream的分组方式" class="headerlink" title="DataStream的分组方式"></a>DataStream的分组方式</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">keyby —— 为了能够在多个并发实例上并行的对数据进行处理，我们需要通过 KeyBy 将数据进行分组 ，KeyBy 是在水平分向对流进行切分。使用 KeyBy 进行数据切分之后，后续算子的每一个实例可以只处理特定 Key 集合对应的数据</span><br><span class="line"></span><br><span class="line">Global: 上游算子将所有记录发送给下游算子的第一个实例。</span><br><span class="line"></span><br><span class="line">Broadcast: 上游算子将每一条记录发送给下游算子的所有实例。</span><br><span class="line"></span><br><span class="line">Forward：只适用于上游算子实例数与下游算子相同时，每个上游算子实例将记录发送给下游算子对应的实例。</span><br><span class="line"></span><br><span class="line">Shuffle：上游算子对每条记录随机选择一个下游算子进行发送。</span><br><span class="line"></span><br><span class="line">Rebalance：上游算子通过轮询的方式发送数据。</span><br><span class="line"></span><br><span class="line">Rescale：当上游和下游算子的实例数为 n 或 m 时，如果 n &lt; m，则每个上游实例向ceil(m/n)或floor(m/n)个下游实例轮询发送数据；如果 n &gt; m，则 floor(n/m) 或 ceil(n/m) 个上游实例向下游实例轮询发送数据。</span><br><span class="line"></span><br><span class="line">PartitionCustomer：当上述内置分配方式不满足需求时，用户还可以选择自定义分组方式。</span><br></pre></td></tr></table></figure>
-<h1 id="DataStream的类型"><a href="#DataStream的类型" class="headerlink" title="DataStream的类型"></a>DataStream的类型</h1><p>Flink DataStream 对像都是强类型的，每一个 DataStream 对象都需要指定元素的类型，Flink 自己底层的序列化机制正是依赖于这些信息对序列化等进行优化。具体来说，在 Flink 底层，它是使用 TypeInformation 对象对类型进行描述的，TypeInformation 对象定义了一组类型相关的信息供序列化框架使用。</p>
-<p><a href="https://sm.ms/image/4JXqZFTpsCfDUYP" target="_blank"><img src="https://i.loli.net/2021/03/07/4JXqZFTpsCfDUYP.png"></a></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GroupedProcessingTimeWindowSample</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 模拟数据源  extends - 继承 数据源</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">DataSource</span> <span class="keyword">extends</span> <span class="title">RichParallelSourceFunction</span>&lt;<span class="title">Tuple2</span>&lt;<span class="title">String</span>, <span class="title">Integer</span>&gt;&gt; </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">boolean</span> isRunning = <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="comment">// Flink 在运行时对 Source 会直接调用该方法，该方法需要不断的输出数据，从而形成初始的流 </span></span><br><span class="line">        <span class="comment">// 随机的产生商品类别和交易量的数据</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">(SourceContext&lt;Tuple2&lt;String, Integer&gt;&gt; ctx)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">            Random random = <span class="keyword">new</span> Random();</span><br><span class="line">            <span class="keyword">while</span> (isRunning) &#123;</span><br><span class="line">                <span class="comment">//getRuntimeContext()方法提供了函数的RuntimeContext的一些信息，例如函数执行的并行度，任务的名字，以及state状态</span></span><br><span class="line">                Thread.sleep((getRuntimeContext().getIndexOfThisSubtask() + <span class="number">1</span>) * <span class="number">1000</span> * <span class="number">5</span>); <span class="comment">// 不知道 是否可以看作是window</span></span><br><span class="line">                String key = <span class="string">&quot;类别&quot;</span> + (<span class="keyword">char</span>) (<span class="string">&#x27;A&#x27;</span> + random.nextInt(<span class="number">3</span>));</span><br><span class="line">                <span class="keyword">int</span> value = random.nextInt(<span class="number">10</span>) + <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">                System.out.println(String.format(<span class="string">&quot;Emits\t(%s, %d)&quot;</span>, key, value));</span><br><span class="line">                <span class="comment">// 将结果通过ctx.collect 方法进行发送</span></span><br><span class="line">                ctx.collect(<span class="keyword">new</span> Tuple2&lt;&gt;(key, value));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="comment">// 当 Flink 需要 Cancel Source Task 的时候会调用该方法</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cancel</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            isRunning = <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">    <span class="comment">// 构建图</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        </span><br><span class="line">        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();</span><br><span class="line">        env.setParallelism(<span class="number">2</span>);</span><br><span class="line">		</span><br><span class="line">        <span class="comment">// 添加数据源 </span></span><br><span class="line">        <span class="comment">// 基本数据源</span></span><br><span class="line">        DataStream&lt;Tuple2&lt;String, Integer&gt;&gt; ds = env.addSource(<span class="keyword">new</span> DataSource()); </span><br><span class="line">        <span class="comment">// 分组数据源 按照第一个字段进行分组</span></span><br><span class="line">        KeyedStream&lt;Tuple2&lt;String, Integer&gt;, Tuple&gt; keyedStream = ds.keyBy(<span class="number">0</span>); </span><br><span class="line">		</span><br><span class="line">        <span class="comment">// keyedStream 按照第二个字段进行求和</span></span><br><span class="line">        keyedStream.sum(<span class="number">1</span>).keyBy(<span class="keyword">new</span> KeySelector&lt;Tuple2&lt;String, Integer&gt;, Object&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> Object <span class="title">getKey</span><span class="params">(Tuple2&lt;String, Integer&gt; stringIntegerTuple2)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).fold(<span class="keyword">new</span> HashMap&lt;String, Integer&gt;(), <span class="keyword">new</span> FoldFunction&lt;Tuple2&lt;String, Integer&gt;, HashMap&lt;String, Integer&gt;&gt;() &#123;</span><br><span class="line">            <span class="comment">// 利用flod 来维持数据的真实性</span></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> HashMap&lt;String, Integer&gt; <span class="title">fold</span><span class="params">(HashMap&lt;String, Integer&gt; accumulator, Tuple2&lt;String, Integer&gt; value)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                <span class="comment">// hashmap 对于当前的数据进行维护，当有新的记录进来之后进行更新</span></span><br><span class="line">                accumulator.put(value.f0, value.f1);</span><br><span class="line">                <span class="keyword">return</span> accumulator;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).addSink(<span class="keyword">new</span> SinkFunction&lt;HashMap&lt;String, Integer&gt;&gt;() &#123;</span><br><span class="line">            <span class="comment">// 最终结果输出</span></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">invoke</span><span class="params">(HashMap&lt;String, Integer&gt; value, Context context)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                  <span class="comment">// 每个类型的商品成交量</span></span><br><span class="line">                  System.out.println(value);</span><br><span class="line">                  <span class="comment">// 商品成交总量                  </span></span><br><span class="line">                  System.out.println(value.values().stream().mapToInt(v -&gt; v).sum());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        env.execute();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在此之上还有更上一层的API接口，基于table和SQL </p>
-]]></content>
-      <categories>
-        <category>大数据学习</category>
-        <category>Flink</category>
-      </categories>
-      <tags>
-        <tag>Flink</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Linux下安装Python和Anaconda遇到的坑</title>
     <url>/2021/01/18/Linux%E4%B8%8B%E5%AE%89%E8%A3%85python%E5%92%8Canaconda%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/</url>
     <content><![CDATA[<p>最近在Linux中安装Python和Anaconda，怎么说了对于没有经验的我来说，虽然不难但是还是有一点麻烦，感觉要修改好多参数，所以这篇文章主要记录一下，在Linux环境下安装Python和Anaconda遇到的坑！对于Python和Anaconda到底如何安装下面会给出一些链接来供大家参考。</p>
@@ -174,6 +194,45 @@
         <tag>Linux</tag>
         <tag>Python</tag>
         <tag>Anaconda</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Flink-DataStream API接口开发规范</title>
+    <url>/2021/01/17/Flink_DataStream%20API%E6%8E%A5%E5%8F%A3%E5%BC%80%E5%8F%91%E8%A7%84%E8%8C%83/</url>
+    <content><![CDATA[<p>Flink 提供了丰富的客户端操作来提交任务和与任务进行交互,利用flink进行实时统计之前先对其接口开发流程进行了解，Flink提供了Java/sql接口，下面主要就Java-api进行介绍。有不太正确的地方忘纠正！！！</p>
+<a id="more"></a>
+
+<h1 id="基本的开发流程"><a href="#基本的开发流程" class="headerlink" title="基本的开发流程"></a>基本的开发流程</h1><p>流处理系统一般采用一种数据驱动的处理方式。它会提前设置一些算子，然后等到数据到达后对数据进行处理。为了表达复杂的计算逻辑，包括 Flink 在内的分布式流处理引擎一般采用 DAG 图来表示整个计算逻辑，其中 DAG 图中的每一个点就代表一个基本的逻辑单元，也就是前面说的算子。由于计算逻辑被组织成有向图，数据会按照边的方向，从一些特殊的 Source 节点流入系统，然后通过网络传输、本地传输等不同的数据传输方式在算子之间进行发送和处理，最后会通过另外一些特殊的 Sink 节点将计算结果发送到某个外部系统或数据库中。<br>但是实际的情况可能会比较复杂一点，一个算子可能有多个实例，因此在真实的计算的时候，不同算子之间的不同实例间会进行数据交换。只有当算子实例分布到不同进程上时，才需要通过网络进行数据传输，而同一进程中的多个实例之间的数据传输通常是不需要通过网络的。</p>
+<p>基于 Apache Storm 用户需要在图中添加 Spout 或 Bolt 这种算子，并指定算子之前的连接方式。这样，在完成整个图的构建之后，就可以将图提交到远程或本地集群运行。与之对比，Apache Flink 的接口虽然也是在构建计算逻辑图，但是 Flink 的 API 定义更加面向数据本身的处理逻辑，它把数据流抽象成为一个无限集，然后定义了一组集合上的操作，然后在底层自动构建相应的 DAG 图。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 构造表达DAG</span></span><br><span class="line"></span><br><span class="line"><span class="number">1.</span> 创建 StreamExecutionEnvironment  </span><br><span class="line">设置运行环境  + 可以用来设置参数和创建数据源以及提交任务 </span><br><span class="line">StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();</span><br><span class="line"></span><br><span class="line"><span class="number">2.</span> 配置数据源读取数据</span><br><span class="line">	DataStream&lt;String&gt; text = env.readTextFile (<span class="string">&quot;input&quot;</span>);</span><br><span class="line">	DataStream&lt;String&gt; text = env.addSource(<span class="keyword">new</span> DataSource()) <span class="comment">// 参数为 自定义的模拟数据源的方法</span></span><br><span class="line">或者</span><br><span class="line">	DataStreamSource&lt;String&gt; stream = env.socketTextStream(hostname, port);</span><br><span class="line"></span><br><span class="line"><span class="number">3.</span>处理数据 进行一系列转换 </span><br><span class="line">DataStream&lt;Tuple2&lt;String, Integer&gt;&gt; counts = text.flatMap(<span class="keyword">new</span> Tokenizer()).keyBy(<span class="number">0</span>).sum(<span class="number">1</span>);</span><br><span class="line">SingleOutputStreamOperator&lt;Tuple2&lt;String, Integer&gt;&gt; sum = stream.flatMap(<span class="keyword">new</span> LineSplitter()).keyBy(<span class="number">0</span>).sum(<span class="number">1</span>);</span><br><span class="line">（这个地方的处理数据的函数 ， 可以自定义 也可以 使用 API）</span><br><span class="line"></span><br><span class="line"><span class="number">4.</span> 配置数据汇写出数据</span><br><span class="line">counts.writeAsText(<span class="string">&quot;output&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="number">5.</span> 提交执行</span><br><span class="line">env.execute(<span class="string">&quot;Java WordCount from SocketTextStream Example&quot;</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// WordCount </span></span><br><span class="line"><span class="keyword">final</span> StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();</span><br><span class="line">DataStreamSource&lt;String&gt; stream = env.socketTextStream(hostname, port);</span><br><span class="line">SingleOutputStreamOperator&lt;Tuple2&lt;String, Integer&gt;&gt; sum = stream.flatMap(<span class="keyword">new</span> LineSplitter()).keyBy(<span class="number">0</span>).sum(<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+<p>在 Word Count 例子中，我们首先将每一条记录（即文件中的一行）分隔为单词，这是通过 FlatMap 操作来实现的。调用 FlatMap 将会在底层的 DAG 图中添加一个 FlatMap 算子。然后，我们得到了一个记录是单词的流。我们将流中的单词进行分组（keyBy），然后累积计算每一个单词的数据（sum(1)）。计算出的单词的数据组成了一个新的流，我们将它写入到输出文件中。<br>Flink调用算子机会在DAG图中建立添加相应的算子节点。<br>前面我们调用的所有方法，都不是在实际处理数据，而是在构通表达计算逻辑的 DAG 图。只有当我们将整个图构建完成并显式的调用 Execute 方法后，框架才会把计算图提供到集群中，接入数据并执行实际的逻辑。<br>Flink 累计计算， Flink 在进行处理的时候，每一次按照设定的时间窗口进行相应的算子，当新的数据进来之后，在原来的基础上进行相应的计算，达到累计的效果。window主要达到了切分的效果，通过过 Window 操作对流可以按时间或者个数进行一些切分，从而将流切分成一个个较小的分组。具体的切分逻辑可以由用户进行选择。当一个分组中所有记录都到达后，用户可以拿到该分组中的所有记录，从而可以进行一些遍历或者累加操作。这样，对每个分组的处理都可以得到一组输出数据，这些输出数据形成了一个新的基本流。</p>
+<h1 id="DataStream操作分类"><a href="#DataStream操作分类" class="headerlink" title="DataStream操作分类"></a>DataStream操作分类</h1><p>Flink DataStream API 的核心，就是代表流数据的 DataStream 对象。整个计算逻辑图的构建就是围绕调用 DataStream 对象上的不同操作产生新的 DataStream 对象展开的。DataStream 上的操作可以分为四类 ： </p>
+<ul>
+<li><p>对于单条记录的操作，比如筛除掉不符合要求的记录（Filter 操作），或者将每条记录都做一个转换（Map 操作）</p>
+</li>
+<li><p>对多条记录的操作。比如说统计一个小时内的订单总成交量，就需要将一个小时内的所有订单记录的成交量加到一起。通过 Window 将需要的记录关联到一起进行处</p>
+</li>
+<li><p>对多个流进行操作并转换为单个流，例如，多个流可以通过 Union、Join 或 Connect 等操作合到一起。这些操作合并的逻辑不同，但是它们最终都会产生了一个新的统一的流，从而可以进行一些跨流的操作。</p>
+</li>
+<li><p>DataStream 还支持与合并对称的操作，即把一个流按一定规则拆分为多个流（Split 操作），每个流是之前流的一个子集，这样我们就可以对不同的流作不同的处理</p>
+<p><a href="https://sm.ms/image/7bzot8QN156Ovwy" target="_blank"><img src="https://i.loli.net/2021/03/07/7bzot8QN156Ovwy.png"></a></p>
+</li>
+</ul>
+<p>对于普通的 DataStream，我们必须使用 allWindow 操作，它代表对整个流进行统一的 Window 处理，因此是不能使用多个算子实例进行同时计算的。针对这一问题，就需要我们首先使用 KeyBy 方法对记录按 Key 进行分组，然后才可以并行的对不同 Key 对应的记录进行单独的 Window 操作。KeyBy 操作是我们日常编程中最重要的操作之一。</p>
+<h1 id="DataStream的分组方式"><a href="#DataStream的分组方式" class="headerlink" title="DataStream的分组方式"></a>DataStream的分组方式</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">keyby —— 为了能够在多个并发实例上并行的对数据进行处理，我们需要通过 KeyBy 将数据进行分组 ，KeyBy 是在水平分向对流进行切分。使用 KeyBy 进行数据切分之后，后续算子的每一个实例可以只处理特定 Key 集合对应的数据</span><br><span class="line"></span><br><span class="line">Global: 上游算子将所有记录发送给下游算子的第一个实例。</span><br><span class="line"></span><br><span class="line">Broadcast: 上游算子将每一条记录发送给下游算子的所有实例。</span><br><span class="line"></span><br><span class="line">Forward：只适用于上游算子实例数与下游算子相同时，每个上游算子实例将记录发送给下游算子对应的实例。</span><br><span class="line"></span><br><span class="line">Shuffle：上游算子对每条记录随机选择一个下游算子进行发送。</span><br><span class="line"></span><br><span class="line">Rebalance：上游算子通过轮询的方式发送数据。</span><br><span class="line"></span><br><span class="line">Rescale：当上游和下游算子的实例数为 n 或 m 时，如果 n &lt; m，则每个上游实例向ceil(m/n)或floor(m/n)个下游实例轮询发送数据；如果 n &gt; m，则 floor(n/m) 或 ceil(n/m) 个上游实例向下游实例轮询发送数据。</span><br><span class="line"></span><br><span class="line">PartitionCustomer：当上述内置分配方式不满足需求时，用户还可以选择自定义分组方式。</span><br></pre></td></tr></table></figure>
+<h1 id="DataStream的类型"><a href="#DataStream的类型" class="headerlink" title="DataStream的类型"></a>DataStream的类型</h1><p>Flink DataStream 对像都是强类型的，每一个 DataStream 对象都需要指定元素的类型，Flink 自己底层的序列化机制正是依赖于这些信息对序列化等进行优化。具体来说，在 Flink 底层，它是使用 TypeInformation 对象对类型进行描述的，TypeInformation 对象定义了一组类型相关的信息供序列化框架使用。</p>
+<p><a href="https://sm.ms/image/4JXqZFTpsCfDUYP" target="_blank"><img src="https://i.loli.net/2021/03/07/4JXqZFTpsCfDUYP.png"></a></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GroupedProcessingTimeWindowSample</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 模拟数据源  extends - 继承 数据源</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">DataSource</span> <span class="keyword">extends</span> <span class="title">RichParallelSourceFunction</span>&lt;<span class="title">Tuple2</span>&lt;<span class="title">String</span>, <span class="title">Integer</span>&gt;&gt; </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">boolean</span> isRunning = <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="comment">// Flink 在运行时对 Source 会直接调用该方法，该方法需要不断的输出数据，从而形成初始的流 </span></span><br><span class="line">        <span class="comment">// 随机的产生商品类别和交易量的数据</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">(SourceContext&lt;Tuple2&lt;String, Integer&gt;&gt; ctx)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">            Random random = <span class="keyword">new</span> Random();</span><br><span class="line">            <span class="keyword">while</span> (isRunning) &#123;</span><br><span class="line">                <span class="comment">//getRuntimeContext()方法提供了函数的RuntimeContext的一些信息，例如函数执行的并行度，任务的名字，以及state状态</span></span><br><span class="line">                Thread.sleep((getRuntimeContext().getIndexOfThisSubtask() + <span class="number">1</span>) * <span class="number">1000</span> * <span class="number">5</span>); <span class="comment">// 不知道 是否可以看作是window</span></span><br><span class="line">                String key = <span class="string">&quot;类别&quot;</span> + (<span class="keyword">char</span>) (<span class="string">&#x27;A&#x27;</span> + random.nextInt(<span class="number">3</span>));</span><br><span class="line">                <span class="keyword">int</span> value = random.nextInt(<span class="number">10</span>) + <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">                System.out.println(String.format(<span class="string">&quot;Emits\t(%s, %d)&quot;</span>, key, value));</span><br><span class="line">                <span class="comment">// 将结果通过ctx.collect 方法进行发送</span></span><br><span class="line">                ctx.collect(<span class="keyword">new</span> Tuple2&lt;&gt;(key, value));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="comment">// 当 Flink 需要 Cancel Source Task 的时候会调用该方法</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cancel</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            isRunning = <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">    <span class="comment">// 构建图</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        </span><br><span class="line">        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();</span><br><span class="line">        env.setParallelism(<span class="number">2</span>);</span><br><span class="line">		</span><br><span class="line">        <span class="comment">// 添加数据源 </span></span><br><span class="line">        <span class="comment">// 基本数据源</span></span><br><span class="line">        DataStream&lt;Tuple2&lt;String, Integer&gt;&gt; ds = env.addSource(<span class="keyword">new</span> DataSource()); </span><br><span class="line">        <span class="comment">// 分组数据源 按照第一个字段进行分组</span></span><br><span class="line">        KeyedStream&lt;Tuple2&lt;String, Integer&gt;, Tuple&gt; keyedStream = ds.keyBy(<span class="number">0</span>); </span><br><span class="line">		</span><br><span class="line">        <span class="comment">// keyedStream 按照第二个字段进行求和</span></span><br><span class="line">        keyedStream.sum(<span class="number">1</span>).keyBy(<span class="keyword">new</span> KeySelector&lt;Tuple2&lt;String, Integer&gt;, Object&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> Object <span class="title">getKey</span><span class="params">(Tuple2&lt;String, Integer&gt; stringIntegerTuple2)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).fold(<span class="keyword">new</span> HashMap&lt;String, Integer&gt;(), <span class="keyword">new</span> FoldFunction&lt;Tuple2&lt;String, Integer&gt;, HashMap&lt;String, Integer&gt;&gt;() &#123;</span><br><span class="line">            <span class="comment">// 利用flod 来维持数据的真实性</span></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> HashMap&lt;String, Integer&gt; <span class="title">fold</span><span class="params">(HashMap&lt;String, Integer&gt; accumulator, Tuple2&lt;String, Integer&gt; value)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                <span class="comment">// hashmap 对于当前的数据进行维护，当有新的记录进来之后进行更新</span></span><br><span class="line">                accumulator.put(value.f0, value.f1);</span><br><span class="line">                <span class="keyword">return</span> accumulator;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).addSink(<span class="keyword">new</span> SinkFunction&lt;HashMap&lt;String, Integer&gt;&gt;() &#123;</span><br><span class="line">            <span class="comment">// 最终结果输出</span></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">invoke</span><span class="params">(HashMap&lt;String, Integer&gt; value, Context context)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                  <span class="comment">// 每个类型的商品成交量</span></span><br><span class="line">                  System.out.println(value);</span><br><span class="line">                  <span class="comment">// 商品成交总量                  </span></span><br><span class="line">                  System.out.println(value.values().stream().mapToInt(v -&gt; v).sum());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        env.execute();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在此之上还有更上一层的API接口，基于table和SQL </p>
+]]></content>
+      <categories>
+        <category>大数据学习</category>
+        <category>Flink</category>
+      </categories>
+      <tags>
+        <tag>Flink</tag>
       </tags>
   </entry>
   <entry>
@@ -301,103 +360,6 @@
       <tags>
         <tag>数据同步</tag>
         <tag>Datax</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Datax同步数据--从ODPS到clickhouse</title>
-    <url>/2021/03/22/datax%E5%90%8C%E6%AD%A5%E6%95%B0%E6%8D%AE--%E4%BB%8EODPS%E5%88%B0clickhouse/</url>
-    <content><![CDATA[<h1 id="Datax-版本问题"><a href="#Datax-版本问题" class="headerlink" title="Datax 版本问题"></a>Datax 版本问题</h1><p>只有写过datax同步数据的文章，之前以为对于所有的数据源都直接使用官网上下载安装下来的datax版本就可以，后面发现并不是，将数据同步到clickhouse 需要安装特定版本的datax.</p>
-<p>百度了好久才发现这个问题:joy:,参考<a href="https://blog.csdn.net/qq_42455809/article/details/107632688">datax同步postgre到clickhouse</a>这一篇文章找到了下面这个链接：</p>
-<p>链接 ： <a href="https://pan.baidu.com/s/18DRihMXtf5IfQG4TIo-Crg">https://pan.baidu.com/s/18DRihMXtf5IfQG4TIo-Crg</a><br>提取码：qdyu</p>
-<h1 id="Datax同步脚本"><a href="#Datax同步脚本" class="headerlink" title="Datax同步脚本"></a>Datax同步脚本</h1><h2 id="从odps到clickhouse"><a href="#从odps到clickhouse" class="headerlink" title="从odps到clickhouse"></a>从odps到clickhouse</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;job&quot;: &#123;</span><br><span class="line">    &quot;setting&quot;: &#123;</span><br><span class="line">      &quot;speed&quot;: &#123;</span><br><span class="line">        &quot;channel&quot;: 1</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;errorLimit&quot;: &#123;</span><br><span class="line">        &quot;record&quot;: 0</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;content&quot;: [&#123;</span><br><span class="line">      &quot;reader&quot;: &#123;</span><br><span class="line">        &quot;name&quot;: &quot;odpsreader&quot;,</span><br><span class="line">        &quot;parameter&quot;: &#123;</span><br><span class="line">          &quot;accessId&quot;: &quot;******&quot;,   </span><br><span class="line">          &quot;accessKey&quot;: &quot;*******&quot;,</span><br><span class="line">          &quot;column&quot;: [</span><br><span class="line">            &quot;*&quot;                  </span><br><span class="line">          ],</span><br><span class="line">          &quot;odpsServer&quot;: &quot;http:&#x2F;&#x2F;***&#x2F;api&quot;,</span><br><span class="line">          &quot;project&quot;: &quot;***&quot;,</span><br><span class="line">          &quot;table&quot;: &quot;***&quot;,</span><br><span class="line">          &quot;tunnelServer&quot;: &quot;http:&#x2F;&#x2F;****&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;writer&quot;: &#123;</span><br><span class="line">        &quot;name&quot;: &quot;clickhousewriter&quot;,</span><br><span class="line">        &quot;parameter&quot;: &#123;</span><br><span class="line">          &quot;username&quot;: &quot;****&quot;,</span><br><span class="line">          &quot;password&quot;: &quot;****&quot;,</span><br><span class="line">          &quot;column&quot;:[&quot;*&quot;</span><br><span class="line">    ],</span><br><span class="line">          &quot;connection&quot;: [</span><br><span class="line">            &#123;</span><br><span class="line">              &quot;jdbcUrl&quot;: &quot;******&quot;,</span><br><span class="line">              &quot;table&quot;: [</span><br><span class="line">                &quot;*****&quot;</span><br><span class="line">              ]</span><br><span class="line">            &#125;</span><br><span class="line">          ],</span><br><span class="line">          &quot;batchSize&quot;: 65536,</span><br><span class="line">          &quot;batchByteSize&quot;: 134217728,</span><br><span class="line">          &quot;dryRun&quot;: false,</span><br><span class="line">          &quot;writeMode&quot;: &quot;insert&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>参数说明</strong></p>
-<p><strong>reader :</strong> </p>
-<ul>
-<li><p>accessId  –  阿里云账号 accessid</p>
-</li>
-<li><p>accessKey –  阿里云账号  accesskey </p>
-</li>
-<li><p>project  – odps中对应的项目空间名</p>
-</li>
-<li><p>odpsserver – odps server地址 对应于不同的所在区域的地址</p>
-</li>
-<li><p>tunnelServer – tunnel server </p>
-<p>odpsServer 和 tunnelServer地址 从<a href="https://help.aliyun.com/document_detail/34951.html?spm=a2c4g.11186623.6.599.670a2996TymW0I">MaxCompute配置Endpoint</a>中查找。</p>
-</li>
-</ul>
-<p><strong>writer :</strong> </p>
-<ul>
-<li>username  – clickhouse用户</li>
-<li>password  –  密码</li>
-<li>jdbcUrl   – clickhouse 的 jdbc地址</li>
-</ul>
-<p><strong>公用：</strong></p>
-<ul>
-<li><p>column    –  所有的字段名  “*” 表示全部 ，不过在真实的场景中 最好将所有的字段列出来</p>
-</li>
-<li><p>table – 表名</p>
-</li>
-</ul>
-<p>想要了解odps写入 / click读取操作可以参考以下几个链接：</p>
-<p><a href="https://github.com/alibaba/DataX/blob/master/odpswriter/doc/odpswriter.md">官方示例写入opds数据</a></p>
-<p><a href="https://github.com/alibaba/DataX/">Datax官方文档</a></p>
-<p><a href="https://my.oschina.net/u/4580416/blog/4360748">Datax的Clickhouse读写操作</a></p>
-<p><a href="https://cloud.tencent.com/developer/article/1541576">Datax的Clickhouse读写插件</a></p>
-<p><a href="https://help.aliyun.com/document_detail/156618.html?spm=a2c4g.11186623.6.569.6e4059784ZE8Sa">云数据库Clickhouse官方-使用DataX同步数据示例</a> </p>
-<h1 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h1><p><strong>问题：脏数据问题</strong></p>
-<p><a href="https://sm.ms/image/OURjmMkuotvHA3n" target="_blank"><img src="https://i.loli.net/2021/03/22/OURjmMkuotvHA3n.png"></a></p>
-<p>找到如下图所示的地方，找到了原因，发现clickhouse在导入数据的时候，不支持null值，所以对源数据中null值进行处理就好。</p>
-<p><a href="https://sm.ms/image/CR9wWdeHKQjBX61" target="_blank"><img src="https://i.loli.net/2021/03/22/CR9wWdeHKQjBX61.png"></a></p>
-<p>总的来说，利用是配置好相应的参数，数据格式处理好，基本没有太大的问题。</p>
-]]></content>
-      <categories>
-        <category>大数据学习</category>
-      </categories>
-      <tags>
-        <tag>数据同步</tag>
-        <tag>Datax</tag>
-        <tag>Clickhouse</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>数据仓库</title>
-    <url>/2021/01/17/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/</url>
-    <content><![CDATA[<p>数据仓库在同步表的时候，针对于不同的情况分为增量表和全量表，下面将对于全量和增量的概念进行一一阐述！</p>
-<a id="more"></a>
-
-<h1 id="全量与增量"><a href="#全量与增量" class="headerlink" title="全量与增量"></a>全量与增量</h1><p>在进行数据同步的时候，通常会提到两个词，全量同步和增量同步，到底全量和增量到底有何区别。在此之前先对以下几个概念有个了解：</p>
-<p>（1）存量：系统在某一时点时的所保有的数量；</p>
-<p>（2）流量：是指在某一段时间内流入/出系统的数量</p>
-<p>（3）增量：则是指在某一段时间内系统中保有数量的变化</p>
-<p>（4）增量=流入量–流出量</p>
-<p>（5）本期期末存量=上期期末存量+本期内增量</p>
-<h1 id="全量"><a href="#全量" class="headerlink" title="全量"></a>全量</h1><p>常说的全量表：即当前时刻存放了所有的历史记录数据。 每一次在同步数据的时候，都要将全部的数据进行拉取，这样做的好处就是，每一次进行查询的时候，表里存放了所有的历史数据，不需要再和之前的数据进行关联，便于SQL的书写，但是这样做的不好之处在于，每次都要拉取全部数据，很耗资源，耗时长，当数据量达到一定程度的时候，这样做根本是不行的。</p>
-<p>对于一个全量表来说，可以总结成以下三点：</p>
-<p>（1）有无变化，都要报</p>
-<p>（2）每一次查询的时候都是所有的历史数据</p>
-<p>（3）只有一个分区</p>
-<h1 id="增量表"><a href="#增量表" class="headerlink" title="增量表"></a>增量表</h1><p> 新增数据，增量数据是上次导出之后的新数据。每一次同步的时候，只是将当天的变化数据进行同步，加入一个用户在昨天进行了一次操作，今天又进行了一次操作，那按照全量的意思来讲，今天在全量表中进行查询的时候其存在两条该用户的数据，而增量表在当天的分区中只有一条该用户的数据，昨天的那条用户数据需要在昨天的分区中进行查找。</p>
-<p>因此，一个增量表有如下的几个特征:</p>
-<p> (1）记录每次增加的量，而不是总量；</p>
-<p> (2）增量表，只报变化量，无变化不用报</p>
-<p> (3）每天一个分区</p>
-<h1 id="3-快照表"><a href="#3-快照表" class="headerlink" title="3.快照表"></a>3.快照表</h1><p>   快照表的存在是为了备份的全量表，其和全量表并无任何差别，只是，快照表为了便于存储数据，按日分区，记录截止数据日期的全量数据。总的来说快照表有如下三个特点：</p>
-<p>（1）快照表，有无变化，都要报</p>
-<p>（2）每次上报的数据都是所有的数据（变化的 + 没有变化的）</p>
-<p>（3）一天一个分区</p>
-<h1 id="4-拉链表"><a href="#4-拉链表" class="headerlink" title="4.拉链表"></a>4.拉链表</h1><pre><code>     在有些情况下，为了保持历史的一些状态，需要用拉链表来做，这样做目的在可以保留所有状态的情况下可以节省空间。  </code></pre>
-<p>​        拉链表，记录一个事件从开始到现在为止的历史变化信息，感觉像是快照表 / 全量表 ，但是拉链表在快照表上进行了优化，在去重的前提下又保留了所有事件从开始到当前的变化信息 ；一般这种表有每一个事件开始活跃到当前的时间信息，记录截止数据日期的全量数据。<br>拉链表适用于以下几种情况吧   数据量有点大，表中某些字段有变化，但是呢变化的频率也不是很高，业务需求呢又需要统计这种变化状态，每天全量一份呢，有点不太现实，不仅浪费了存储空间，有时可能业务统计也有点麻烦，这时，拉链表的作用就提现出来了，既节省空间，又满足了需求。 总的来说，拉链表有如下几个特征：</p>
-<p>（1）记录一个事物从开始，一直到当前状态的所有变化的信息；</p>
-<p>（2）拉链表每次上报的都是历史记录的最终状态，是记录在当前时刻的历史总量；</p>
-<p>（3）当前记录存的是当前时间之前的所有历史记录的最后变化量（总量）；</p>
-<p>（4）只有一个分区</p>
-]]></content>
-      <categories>
-        <category>数据仓库</category>
-      </categories>
-      <tags>
-        <tag>全量</tag>
-        <tag>增量</tag>
       </tags>
   </entry>
   <entry>
@@ -631,6 +593,47 @@
       <tags>
         <tag>flume</tag>
         <tag>HDFS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数据仓库</title>
+    <url>/2021/01/17/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/</url>
+    <content><![CDATA[<p>数据仓库在同步表的时候，针对于不同的情况分为增量表和全量表，下面将对于全量和增量的概念进行一一阐述！</p>
+<a id="more"></a>
+
+<h1 id="全量与增量"><a href="#全量与增量" class="headerlink" title="全量与增量"></a>全量与增量</h1><p>在进行数据同步的时候，通常会提到两个词，全量同步和增量同步，到底全量和增量到底有何区别。在此之前先对以下几个概念有个了解：</p>
+<p>（1）存量：系统在某一时点时的所保有的数量；</p>
+<p>（2）流量：是指在某一段时间内流入/出系统的数量</p>
+<p>（3）增量：则是指在某一段时间内系统中保有数量的变化</p>
+<p>（4）增量=流入量–流出量</p>
+<p>（5）本期期末存量=上期期末存量+本期内增量</p>
+<h1 id="全量"><a href="#全量" class="headerlink" title="全量"></a>全量</h1><p>常说的全量表：即当前时刻存放了所有的历史记录数据。 每一次在同步数据的时候，都要将全部的数据进行拉取，这样做的好处就是，每一次进行查询的时候，表里存放了所有的历史数据，不需要再和之前的数据进行关联，便于SQL的书写，但是这样做的不好之处在于，每次都要拉取全部数据，很耗资源，耗时长，当数据量达到一定程度的时候，这样做根本是不行的。</p>
+<p>对于一个全量表来说，可以总结成以下三点：</p>
+<p>（1）有无变化，都要报</p>
+<p>（2）每一次查询的时候都是所有的历史数据</p>
+<p>（3）只有一个分区</p>
+<h1 id="增量表"><a href="#增量表" class="headerlink" title="增量表"></a>增量表</h1><p> 新增数据，增量数据是上次导出之后的新数据。每一次同步的时候，只是将当天的变化数据进行同步，加入一个用户在昨天进行了一次操作，今天又进行了一次操作，那按照全量的意思来讲，今天在全量表中进行查询的时候其存在两条该用户的数据，而增量表在当天的分区中只有一条该用户的数据，昨天的那条用户数据需要在昨天的分区中进行查找。</p>
+<p>因此，一个增量表有如下的几个特征:</p>
+<p> (1）记录每次增加的量，而不是总量；</p>
+<p> (2）增量表，只报变化量，无变化不用报</p>
+<p> (3）每天一个分区</p>
+<h1 id="3-快照表"><a href="#3-快照表" class="headerlink" title="3.快照表"></a>3.快照表</h1><p>   快照表的存在是为了备份的全量表，其和全量表并无任何差别，只是，快照表为了便于存储数据，按日分区，记录截止数据日期的全量数据。总的来说快照表有如下三个特点：</p>
+<p>（1）快照表，有无变化，都要报</p>
+<p>（2）每次上报的数据都是所有的数据（变化的 + 没有变化的）</p>
+<p>（3）一天一个分区</p>
+<h1 id="4-拉链表"><a href="#4-拉链表" class="headerlink" title="4.拉链表"></a>4.拉链表</h1><pre><code>     在有些情况下，为了保持历史的一些状态，需要用拉链表来做，这样做目的在可以保留所有状态的情况下可以节省空间。  </code></pre>
+<p>​        拉链表，记录一个事件从开始到现在为止的历史变化信息，感觉像是快照表 / 全量表 ，但是拉链表在快照表上进行了优化，在去重的前提下又保留了所有事件从开始到当前的变化信息 ；一般这种表有每一个事件开始活跃到当前的时间信息，记录截止数据日期的全量数据。<br>拉链表适用于以下几种情况吧   数据量有点大，表中某些字段有变化，但是呢变化的频率也不是很高，业务需求呢又需要统计这种变化状态，每天全量一份呢，有点不太现实，不仅浪费了存储空间，有时可能业务统计也有点麻烦，这时，拉链表的作用就提现出来了，既节省空间，又满足了需求。 总的来说，拉链表有如下几个特征：</p>
+<p>（1）记录一个事物从开始，一直到当前状态的所有变化的信息；</p>
+<p>（2）拉链表每次上报的都是历史记录的最终状态，是记录在当前时刻的历史总量；</p>
+<p>（3）当前记录存的是当前时间之前的所有历史记录的最后变化量（总量）；</p>
+<p>（4）只有一个分区</p>
+]]></content>
+      <categories>
+        <category>数据仓库</category>
+      </categories>
+      <tags>
+        <tag>全量</tag>
+        <tag>增量</tag>
       </tags>
   </entry>
 </search>
