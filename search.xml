@@ -177,106 +177,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Datax同步数据--从ODPS到clickhouse</title>
-    <url>/2021/03/22/datax%E5%90%8C%E6%AD%A5%E6%95%B0%E6%8D%AE--%E4%BB%8EODPS%E5%88%B0clickhouse/</url>
-    <content><![CDATA[<p> Datax同步数据–从ODPS到clickhouse!!!</p>
-<a id="more"></a>
-
-<h1 id="Datax-版本问题"><a href="#Datax-版本问题" class="headerlink" title="Datax 版本问题"></a>Datax 版本问题</h1><p>之前有写过datax同步数据的文章，以前以为对于所有的数据源都可以直接使用官方master分支的datax版本就可以，后面发现并不是，将数据同步到clickhouse 需要安装特定版本的datax.</p>
-<p>百度了好久才发现这个问题​ :joy:,参考<a href="https://blog.csdn.net/qq_42455809/article/details/107632688">datax同步postgre到clickhouse</a>这一篇文章找到了下面这个链接：</p>
-<p>链接 ： <a href="https://pan.baidu.com/s/18DRihMXtf5IfQG4TIo-Crg">https://pan.baidu.com/s/18DRihMXtf5IfQG4TIo-Crg</a><br>提取码：qdyu</p>
-<h1 id="Datax同步脚本"><a href="#Datax同步脚本" class="headerlink" title="Datax同步脚本"></a>Datax同步脚本</h1><h2 id="从odps到clickhouse"><a href="#从odps到clickhouse" class="headerlink" title="从odps到clickhouse"></a>从odps到clickhouse</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;job&quot;: &#123;</span><br><span class="line">    &quot;setting&quot;: &#123;</span><br><span class="line">      &quot;speed&quot;: &#123;</span><br><span class="line">        &quot;channel&quot;: 1</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;errorLimit&quot;: &#123;</span><br><span class="line">        &quot;record&quot;: 0</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;content&quot;: [&#123;</span><br><span class="line">      &quot;reader&quot;: &#123;</span><br><span class="line">        &quot;name&quot;: &quot;odpsreader&quot;,</span><br><span class="line">        &quot;parameter&quot;: &#123;</span><br><span class="line">          &quot;accessId&quot;: &quot;******&quot;,   </span><br><span class="line">          &quot;accessKey&quot;: &quot;*******&quot;,</span><br><span class="line">          &quot;column&quot;: [</span><br><span class="line">            &quot;*&quot;                  </span><br><span class="line">          ],</span><br><span class="line">          &quot;odpsServer&quot;: &quot;http:&#x2F;&#x2F;***&#x2F;api&quot;,</span><br><span class="line">          &quot;project&quot;: &quot;***&quot;,</span><br><span class="line">          &quot;table&quot;: &quot;***&quot;,</span><br><span class="line">          &quot;tunnelServer&quot;: &quot;http:&#x2F;&#x2F;****&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;writer&quot;: &#123;</span><br><span class="line">        &quot;name&quot;: &quot;clickhousewriter&quot;,</span><br><span class="line">        &quot;parameter&quot;: &#123;</span><br><span class="line">          &quot;username&quot;: &quot;****&quot;,</span><br><span class="line">          &quot;password&quot;: &quot;****&quot;,</span><br><span class="line">          &quot;column&quot;:[&quot;*&quot;</span><br><span class="line">    ],</span><br><span class="line">          &quot;connection&quot;: [</span><br><span class="line">            &#123;</span><br><span class="line">              &quot;jdbcUrl&quot;: &quot;******&quot;,</span><br><span class="line">              &quot;table&quot;: [</span><br><span class="line">                &quot;*****&quot;</span><br><span class="line">              ]</span><br><span class="line">            &#125;</span><br><span class="line">          ],</span><br><span class="line">          &quot;batchSize&quot;: 65536,</span><br><span class="line">          &quot;batchByteSize&quot;: 134217728,</span><br><span class="line">          &quot;dryRun&quot;: false,</span><br><span class="line">          &quot;writeMode&quot;: &quot;insert&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>参数说明</strong></p>
-<p><strong>reader :</strong> </p>
-<ul>
-<li><p>accessId  –  阿里云账号 accessid</p>
-</li>
-<li><p>accessKey –  阿里云账号  accesskey </p>
-</li>
-<li><p>project  – odps中对应的项目空间名</p>
-</li>
-<li><p>odpsserver – odps server地址 对应于不同的所在区域的地址</p>
-</li>
-<li><p>tunnelServer – tunnel server </p>
-<p>odpsServer 和 tunnelServer地址 从<a href="https://help.aliyun.com/document_detail/34951.html?spm=a2c4g.11186623.6.599.670a2996TymW0I">MaxCompute配置Endpoint</a>中查找。</p>
-</li>
-</ul>
-<p><strong>writer :</strong> </p>
-<ul>
-<li>username  – clickhouse用户</li>
-<li>password  –  密码</li>
-<li>jdbcUrl   – clickhouse 的 jdbc地址</li>
-</ul>
-<p><strong>公用：</strong></p>
-<ul>
-<li><p>column    –  所有的字段名  “*” 表示全部 ，不过在真实的场景中 最好将所有的字段列出来</p>
-</li>
-<li><p>table – 表名</p>
-</li>
-</ul>
-<p>想要了解odps写入 / click读取操作可以参考以下几个链接：</p>
-<p><a href="https://github.com/alibaba/DataX/blob/master/odpswriter/doc/odpswriter.md">官方示例写入opds数据</a></p>
-<p><a href="https://github.com/alibaba/DataX/">Datax官方文档</a></p>
-<p><a href="https://my.oschina.net/u/4580416/blog/4360748">Datax的Clickhouse读写操作</a></p>
-<p><a href="https://cloud.tencent.com/developer/article/1541576">Datax的Clickhouse读写插件</a></p>
-<p><a href="https://help.aliyun.com/document_detail/156618.html?spm=a2c4g.11186623.6.569.6e4059784ZE8Sa">云数据库Clickhouse官方-使用DataX同步数据示例</a> </p>
-<h1 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h1><p><strong>问题：脏数据问题</strong></p>
-<p><a href="https://sm.ms/image/OURjmMkuotvHA3n" target="_blank"><img src="https://i.loli.net/2021/03/22/OURjmMkuotvHA3n.png"></a></p>
-<p>找到如下图所示的地方，找到了原因，发现clickhouse在导入数据的时候，不支持null值，所以对源数据中null值进行处理就好。</p>
-<p><a href="https://sm.ms/image/CR9wWdeHKQjBX61" target="_blank"><img src="https://i.loli.net/2021/03/22/CR9wWdeHKQjBX61.png"></a></p>
-<p>总的来说，利用是配置好相应的参数，数据格式处理好，基本没有太大的问题。</p>
-]]></content>
-      <categories>
-        <category>大数据学习</category>
-      </categories>
-      <tags>
-        <tag>数据同步</tag>
-        <tag>Datax</tag>
-        <tag>Clickhouse</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>数据仓库</title>
-    <url>/2021/01/17/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/</url>
-    <content><![CDATA[<p>数据仓库在同步表的时候，针对于不同的情况分为增量表和全量表，下面将对于全量和增量的概念进行一一阐述！</p>
-<a id="more"></a>
-
-<h1 id="全量与增量"><a href="#全量与增量" class="headerlink" title="全量与增量"></a>全量与增量</h1><p>在进行数据同步的时候，通常会提到两个词，全量同步和增量同步，到底全量和增量到底有何区别。在此之前先对以下几个概念有个了解：</p>
-<p>（1）存量：系统在某一时点时的所保有的数量；</p>
-<p>（2）流量：是指在某一段时间内流入/出系统的数量</p>
-<p>（3）增量：则是指在某一段时间内系统中保有数量的变化</p>
-<p>（4）增量=流入量–流出量</p>
-<p>（5）本期期末存量=上期期末存量+本期内增量</p>
-<h1 id="全量"><a href="#全量" class="headerlink" title="全量"></a>全量</h1><p>常说的全量表：即当前时刻存放了所有的历史记录数据。 每一次在同步数据的时候，都要将全部的数据进行拉取，这样做的好处就是，每一次进行查询的时候，表里存放了所有的历史数据，不需要再和之前的数据进行关联，便于SQL的书写，但是这样做的不好之处在于，每次都要拉取全部数据，很耗资源，耗时长，当数据量达到一定程度的时候，这样做根本是不行的。</p>
-<p>对于一个全量表来说，可以总结成以下三点：</p>
-<p>（1）有无变化，都要报</p>
-<p>（2）每一次查询的时候都是所有的历史数据</p>
-<p>（3）只有一个分区</p>
-<h1 id="增量表"><a href="#增量表" class="headerlink" title="增量表"></a>增量表</h1><p> 新增数据，增量数据是上次导出之后的新数据。每一次同步的时候，只是将当天的变化数据进行同步，加入一个用户在昨天进行了一次操作，今天又进行了一次操作，那按照全量的意思来讲，今天在全量表中进行查询的时候其存在两条该用户的数据，而增量表在当天的分区中只有一条该用户的数据，昨天的那条用户数据需要在昨天的分区中进行查找。</p>
-<p>因此，一个增量表有如下的几个特征:</p>
-<p> (1）记录每次增加的量，而不是总量；</p>
-<p> (2）增量表，只报变化量，无变化不用报</p>
-<p> (3）每天一个分区</p>
-<h1 id="3-快照表"><a href="#3-快照表" class="headerlink" title="3.快照表"></a>3.快照表</h1><p>   快照表的存在是为了备份的全量表，其和全量表并无任何差别，只是，快照表为了便于存储数据，按日分区，记录截止数据日期的全量数据。总的来说快照表有如下三个特点：</p>
-<p>（1）快照表，有无变化，都要报</p>
-<p>（2）每次上报的数据都是所有的数据（变化的 + 没有变化的）</p>
-<p>（3）一天一个分区</p>
-<h1 id="4-拉链表"><a href="#4-拉链表" class="headerlink" title="4.拉链表"></a>4.拉链表</h1><pre><code>     在有些情况下，为了保持历史的一些状态，需要用拉链表来做，这样做目的在可以保留所有状态的情况下可以节省空间。  </code></pre>
-<p>​        拉链表，记录一个事件从开始到现在为止的历史变化信息，感觉像是快照表 / 全量表 ，但是拉链表在快照表上进行了优化，在去重的前提下又保留了所有事件从开始到当前的变化信息 ；一般这种表有每一个事件开始活跃到当前的时间信息，记录截止数据日期的全量数据。<br>拉链表适用于以下几种情况吧   数据量有点大，表中某些字段有变化，但是呢变化的频率也不是很高，业务需求呢又需要统计这种变化状态，每天全量一份呢，有点不太现实，不仅浪费了存储空间，有时可能业务统计也有点麻烦，这时，拉链表的作用就提现出来了，既节省空间，又满足了需求。 总的来说，拉链表有如下几个特征：</p>
-<p>（1）记录一个事物从开始，一直到当前状态的所有变化的信息；</p>
-<p>（2）拉链表每次上报的都是历史记录的最终状态，是记录在当前时刻的历史总量；</p>
-<p>（3）当前记录存的是当前时间之前的所有历史记录的最后变化量（总量）；</p>
-<p>（4）只有一个分区</p>
-]]></content>
-      <categories>
-        <category>数据仓库</category>
-      </categories>
-      <tags>
-        <tag>全量</tag>
-        <tag>增量</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Datax数据同步</title>
     <url>/2021/01/17/datax%E4%BB%8B%E7%BB%8D/</url>
     <content><![CDATA[<p>datax 数据同步离线工具，将不同数据源的同步抽象为从源头数据源读取数据的Reader插件，以及向目标端写入数据的Writer插件，理论上DataX框架可以支持任意数据源类型的数据同步工作。同时DataX插件体系作为一套生态系统, 每接入一套新数据源该新加入的数据源即可实现和现有的数据源互通。</p>
@@ -396,11 +296,111 @@
 <p>遇见时间类型转换问题时要小心，保守最好是string，简单的比较大小不会影响后续计算。</p>
 ]]></content>
       <categories>
-        <category>大数据学习</category>
+        <category>Datax系列</category>
       </categories>
       <tags>
         <tag>数据同步</tag>
         <tag>Datax</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Datax同步数据--从ODPS到clickhouse</title>
+    <url>/2021/03/28/datax%E5%90%8C%E6%AD%A5%E6%95%B0%E6%8D%AE--%E4%BB%8EODPS%E5%88%B0clickhouse/</url>
+    <content><![CDATA[<p> Datax同步数据–从ODPS到clickhouse!!!</p>
+<a id="more"></a>
+
+<h1 id="Datax-版本问题"><a href="#Datax-版本问题" class="headerlink" title="Datax 版本问题"></a>Datax 版本问题</h1><p>之前有写过datax同步数据的文章，以前以为对于所有的数据源都可以直接使用官方master分支的datax版本就可以，后面发现并不是，将数据同步到clickhouse 需要安装特定版本的datax.</p>
+<p>百度了好久才发现这个问题​ :joy:,参考<a href="https://blog.csdn.net/qq_42455809/article/details/107632688">datax同步postgre到clickhouse</a>这一篇文章找到了下面这个链接：</p>
+<p>链接 ： <a href="https://pan.baidu.com/s/18DRihMXtf5IfQG4TIo-Crg">https://pan.baidu.com/s/18DRihMXtf5IfQG4TIo-Crg</a><br>提取码：qdyu</p>
+<h1 id="Datax同步脚本"><a href="#Datax同步脚本" class="headerlink" title="Datax同步脚本"></a>Datax同步脚本</h1><h2 id="从odps到clickhouse"><a href="#从odps到clickhouse" class="headerlink" title="从odps到clickhouse"></a>从odps到clickhouse</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;job&quot;: &#123;</span><br><span class="line">    &quot;setting&quot;: &#123;</span><br><span class="line">      &quot;speed&quot;: &#123;</span><br><span class="line">        &quot;channel&quot;: 1</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;errorLimit&quot;: &#123;</span><br><span class="line">        &quot;record&quot;: 0</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;content&quot;: [&#123;</span><br><span class="line">      &quot;reader&quot;: &#123;</span><br><span class="line">        &quot;name&quot;: &quot;odpsreader&quot;,</span><br><span class="line">        &quot;parameter&quot;: &#123;</span><br><span class="line">          &quot;accessId&quot;: &quot;******&quot;,   </span><br><span class="line">          &quot;accessKey&quot;: &quot;*******&quot;,</span><br><span class="line">          &quot;column&quot;: [</span><br><span class="line">            &quot;*&quot;                  </span><br><span class="line">          ],</span><br><span class="line">          &quot;odpsServer&quot;: &quot;http:&#x2F;&#x2F;***&#x2F;api&quot;,</span><br><span class="line">          &quot;project&quot;: &quot;***&quot;,</span><br><span class="line">          &quot;table&quot;: &quot;***&quot;,</span><br><span class="line">          &quot;tunnelServer&quot;: &quot;http:&#x2F;&#x2F;****&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;writer&quot;: &#123;</span><br><span class="line">        &quot;name&quot;: &quot;clickhousewriter&quot;,</span><br><span class="line">        &quot;parameter&quot;: &#123;</span><br><span class="line">          &quot;username&quot;: &quot;****&quot;,</span><br><span class="line">          &quot;password&quot;: &quot;****&quot;,</span><br><span class="line">          &quot;column&quot;:[&quot;*&quot;</span><br><span class="line">    ],</span><br><span class="line">          &quot;connection&quot;: [</span><br><span class="line">            &#123;</span><br><span class="line">              &quot;jdbcUrl&quot;: &quot;******&quot;,</span><br><span class="line">              &quot;table&quot;: [</span><br><span class="line">                &quot;*****&quot;</span><br><span class="line">              ]</span><br><span class="line">            &#125;</span><br><span class="line">          ],</span><br><span class="line">          &quot;batchSize&quot;: 65536,</span><br><span class="line">          &quot;batchByteSize&quot;: 134217728,</span><br><span class="line">          &quot;dryRun&quot;: false,</span><br><span class="line">          &quot;writeMode&quot;: &quot;insert&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>参数说明</strong></p>
+<p><strong>reader :</strong> </p>
+<ul>
+<li><p>accessId  –  阿里云账号 accessid</p>
+</li>
+<li><p>accessKey –  阿里云账号  accesskey </p>
+</li>
+<li><p>project  – odps中对应的项目空间名</p>
+</li>
+<li><p>odpsserver – odps server地址 对应于不同的所在区域的地址</p>
+</li>
+<li><p>tunnelServer – tunnel server </p>
+<p>odpsServer 和 tunnelServer地址 从<a href="https://help.aliyun.com/document_detail/34951.html?spm=a2c4g.11186623.6.599.670a2996TymW0I">MaxCompute配置Endpoint</a>中查找。</p>
+</li>
+</ul>
+<p><strong>writer :</strong> </p>
+<ul>
+<li>username  – clickhouse用户</li>
+<li>password  –  密码</li>
+<li>jdbcUrl   – clickhouse 的 jdbc地址</li>
+</ul>
+<p><strong>公用：</strong></p>
+<ul>
+<li><p>column    –  所有的字段名  “*” 表示全部 ，不过在真实的场景中 最好将所有的字段列出来</p>
+</li>
+<li><p>table – 表名</p>
+</li>
+</ul>
+<p>想要了解odps写入 / click读取操作可以参考以下几个链接：</p>
+<p><a href="https://github.com/alibaba/DataX/blob/master/odpswriter/doc/odpswriter.md">官方示例写入opds数据</a></p>
+<p><a href="https://github.com/alibaba/DataX/">Datax官方文档</a></p>
+<p><a href="https://my.oschina.net/u/4580416/blog/4360748">Datax的Clickhouse读写操作</a></p>
+<p><a href="https://cloud.tencent.com/developer/article/1541576">Datax的Clickhouse读写插件</a></p>
+<p><a href="https://help.aliyun.com/document_detail/156618.html?spm=a2c4g.11186623.6.569.6e4059784ZE8Sa">云数据库Clickhouse官方-使用DataX同步数据示例</a> </p>
+<h1 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h1><p><strong>问题：脏数据问题</strong></p>
+<p><a href="https://sm.ms/image/OURjmMkuotvHA3n" target="_blank"><img src="https://i.loli.net/2021/03/22/OURjmMkuotvHA3n.png"></a></p>
+<p>找到如下图所示的地方，找到了原因，发现clickhouse在导入数据的时候，不支持null值，所以对源数据中null值进行处理就好。</p>
+<p><a href="https://sm.ms/image/CR9wWdeHKQjBX61" target="_blank"><img src="https://i.loli.net/2021/03/22/CR9wWdeHKQjBX61.png"></a></p>
+<p>总的来说，利用是配置好相应的参数，数据格式处理好，基本没有太大的问题。</p>
+]]></content>
+      <categories>
+        <category>Datax系列</category>
+      </categories>
+      <tags>
+        <tag>数据同步</tag>
+        <tag>Datax</tag>
+        <tag>Clickhouse</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数据仓库</title>
+    <url>/2021/01/17/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/</url>
+    <content><![CDATA[<p>数据仓库在同步表的时候，针对于不同的情况分为增量表和全量表，下面将对于全量和增量的概念进行一一阐述！</p>
+<a id="more"></a>
+
+<h1 id="全量与增量"><a href="#全量与增量" class="headerlink" title="全量与增量"></a>全量与增量</h1><p>在进行数据同步的时候，通常会提到两个词，全量同步和增量同步，到底全量和增量到底有何区别。在此之前先对以下几个概念有个了解：</p>
+<p>（1）存量：系统在某一时点时的所保有的数量；</p>
+<p>（2）流量：是指在某一段时间内流入/出系统的数量</p>
+<p>（3）增量：则是指在某一段时间内系统中保有数量的变化</p>
+<p>（4）增量=流入量–流出量</p>
+<p>（5）本期期末存量=上期期末存量+本期内增量</p>
+<h1 id="全量"><a href="#全量" class="headerlink" title="全量"></a>全量</h1><p>常说的全量表：即当前时刻存放了所有的历史记录数据。 每一次在同步数据的时候，都要将全部的数据进行拉取，这样做的好处就是，每一次进行查询的时候，表里存放了所有的历史数据，不需要再和之前的数据进行关联，便于SQL的书写，但是这样做的不好之处在于，每次都要拉取全部数据，很耗资源，耗时长，当数据量达到一定程度的时候，这样做根本是不行的。</p>
+<p>对于一个全量表来说，可以总结成以下三点：</p>
+<p>（1）有无变化，都要报</p>
+<p>（2）每一次查询的时候都是所有的历史数据</p>
+<p>（3）只有一个分区</p>
+<h1 id="增量表"><a href="#增量表" class="headerlink" title="增量表"></a>增量表</h1><p> 新增数据，增量数据是上次导出之后的新数据。每一次同步的时候，只是将当天的变化数据进行同步，加入一个用户在昨天进行了一次操作，今天又进行了一次操作，那按照全量的意思来讲，今天在全量表中进行查询的时候其存在两条该用户的数据，而增量表在当天的分区中只有一条该用户的数据，昨天的那条用户数据需要在昨天的分区中进行查找。</p>
+<p>因此，一个增量表有如下的几个特征:</p>
+<p> (1）记录每次增加的量，而不是总量；</p>
+<p> (2）增量表，只报变化量，无变化不用报</p>
+<p> (3）每天一个分区</p>
+<h1 id="3-快照表"><a href="#3-快照表" class="headerlink" title="3.快照表"></a>3.快照表</h1><p>   快照表的存在是为了备份的全量表，其和全量表并无任何差别，只是，快照表为了便于存储数据，按日分区，记录截止数据日期的全量数据。总的来说快照表有如下三个特点：</p>
+<p>（1）快照表，有无变化，都要报</p>
+<p>（2）每次上报的数据都是所有的数据（变化的 + 没有变化的）</p>
+<p>（3）一天一个分区</p>
+<h1 id="4-拉链表"><a href="#4-拉链表" class="headerlink" title="4.拉链表"></a>4.拉链表</h1><pre><code>     在有些情况下，为了保持历史的一些状态，需要用拉链表来做，这样做目的在可以保留所有状态的情况下可以节省空间。  </code></pre>
+<p>​        拉链表，记录一个事件从开始到现在为止的历史变化信息，感觉像是快照表 / 全量表 ，但是拉链表在快照表上进行了优化，在去重的前提下又保留了所有事件从开始到当前的变化信息 ；一般这种表有每一个事件开始活跃到当前的时间信息，记录截止数据日期的全量数据。<br>拉链表适用于以下几种情况吧   数据量有点大，表中某些字段有变化，但是呢变化的频率也不是很高，业务需求呢又需要统计这种变化状态，每天全量一份呢，有点不太现实，不仅浪费了存储空间，有时可能业务统计也有点麻烦，这时，拉链表的作用就提现出来了，既节省空间，又满足了需求。 总的来说，拉链表有如下几个特征：</p>
+<p>（1）记录一个事物从开始，一直到当前状态的所有变化的信息；</p>
+<p>（2）拉链表每次上报的都是历史记录的最终状态，是记录在当前时刻的历史总量；</p>
+<p>（3）当前记录存的是当前时间之前的所有历史记录的最后变化量（总量）；</p>
+<p>（4）只有一个分区</p>
+]]></content>
+      <categories>
+        <category>数据仓库</category>
+      </categories>
+      <tags>
+        <tag>全量</tag>
+        <tag>增量</tag>
       </tags>
   </entry>
   <entry>
@@ -517,7 +517,7 @@
 </ul>
 </li>
 </ul>
-<p><img src="/.io//hilxua.png">    </p>
+<p>[img]<a href="https://riyugo.com/i/2021/03/23/j1w45t.png[/img]">https://riyugo.com/i/2021/03/23/j1w45t.png[/img]</a>   </p>
 <p>那Flume到底是如何工作的呢？主要还是通过上面原型图将源源不断地数据流存储到外部，对于一条数据也就是事件流如下图所示过程实现采集。我们把一次source-channel-sink称为是一个agent。 </p>
 <p><img src="https://img2020.cnblogs.com/blog/1620989/202101/1620989-20210122225821153-557297293.png">  </p>
 <p>  对于数据流，则是将不断产生的事件流最后进行汇总即可，如下所示：</p>
